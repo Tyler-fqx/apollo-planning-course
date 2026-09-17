@@ -41,7 +41,7 @@ const fileUrl = (name) => "file:///" + path.join(siteRoot, name).replaceAll("\\"
       const content = await page.locator(".lesson-content").innerText();
       if (!content.includes("源码位置")) throw new Error(`Lesson ${number} is missing source locations`);
     }
-    if ([1, 2, 3, 8, 10, 11, 12, 14, 15, 16, 18, 20].includes(i)) {
+    if ([2, 3, 8, 10, 11, 12, 14, 15, 16, 18, 20].includes(i)) {
       await page.waitForSelector(".lesson-content .mermaid svg", { timeout: 15000 });
     }
     if ([1, 2, 3, 5, 15, 19].includes(i)) {

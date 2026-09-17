@@ -6,7 +6,7 @@
     <meta name="description" content="建立 Apollo 与 Planning 的整体地图，认识 Component、Planner、Scenario、Stage 和 Task。">
     <title>Apollo 与 Planning 全景地图 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
-    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
+    
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-01">
@@ -108,61 +108,11 @@
 </tr>
 </tbody></table>
 <p>把主链路和横向能力放在一起看：</p>
-<pre><code class="language-mermaid">flowchart TB
-    subgraph L1[&quot;车辆与环境层&quot;]
-        Env[&quot;道路 / 车辆 / 障碍物 / 交通信号&quot;]
-    end
+<figure class="lesson-illustration">
+  <img src="assets/images/anime-apollo-architecture-flow.webp" alt="动漫风 Apollo 分层架构流程图" loading="lazy">
+  <figcaption><strong>动漫风架构流程图：</strong>主链路为 ENVIRONMENT -> VEHICLE INTERFACE -> UNDERSTAND -> PLANNING -> CONTROL -> EXECUTION；VEHICLE INTERFACE 包含 SENSOR、CANBUS，UNDERSTAND 包含 LOCALIZATION、PERCEPTION、PREDICTION、MAP ROUTING，PLANNING 内部包含 SCENARIO、STAGE、TASK，底部的 PLATFORM 表示 CYBER、AEM、BUILD、DREAMVIEW 等横向基础设施。</figcaption>
+</figure>
 
-    subgraph L2[&quot;车载接口层&quot;]
-        Sensors[&quot;传感器与驱动&quot;]
-        Canbus[&quot;Canbus / 底盘状态&quot;]
-    end
-
-    subgraph L3[&quot;环境理解层&quot;]
-        Localization[&quot;Localization 定位&quot;]
-        Perception[&quot;Perception 感知&quot;]
-        Prediction[&quot;Prediction 预测&quot;]
-        Map[&quot;HD Map / Routing&quot;]
-    end
-
-    subgraph L4[&quot;决策与规划层&quot;]
-        Planning[&quot;Planning 规划&quot;]
-        Scenario[&quot;Scenario / Stage / Task&quot;]
-    end
-
-    subgraph L5[&quot;控制与执行层&quot;]
-        Control[&quot;Control 控制&quot;]
-        Chassis[&quot;车辆底盘执行&quot;]
-    end
-
-    subgraph Platform[&quot;横向基础设施&quot;]
-        Cyber[&quot;Cyber 通信&quot;]
-        Tools[&quot;AEM / buildtool&quot;]
-        DreamView[&quot;DreamView 可视化&quot;]
-    end
-
-    Env --&gt; Sensors
-    Env --&gt; Canbus
-    Sensors --&gt; Localization
-    Sensors --&gt; Perception
-    Canbus --&gt; Localization
-    Localization --&gt; Perception
-    Perception --&gt; Prediction
-    Map --&gt; Perception
-    Map --&gt; Planning
-    Localization --&gt; Planning
-    Perception --&gt; Planning
-    Prediction --&gt; Planning
-    Planning --&gt; Scenario
-    Scenario --&gt; Planning
-    Planning --&gt; Control
-    Control --&gt; Chassis
-    Cyber -.模块通信.-&gt; Perception
-    Cyber -.模块通信.-&gt; Planning
-    Cyber -.模块通信.-&gt; Control
-    DreamView -.观察.-&gt; Planning
-    Tools -.构建和启动.-&gt; Planning
-</code></pre>
 <p>读图时抓住三条线：</p>
 <ol>
 <li><strong>主链路</strong>：环境 -&gt; 车载数据 -&gt; 环境理解 -&gt; Planning -&gt; Control -&gt; 执行。</li>

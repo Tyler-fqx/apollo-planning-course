@@ -37,62 +37,11 @@ Apollo 不是一条“感知 -> 规划 -> 控制”的单线，而是分层的�
 
 把主链路和横向能力放在一起看：
 
-```mermaid
-flowchart TB
-    subgraph L1["车辆与环境层"]
-        Env["道路 / 车辆 / 障碍物 / 交通信号"]
-    end
 
-    subgraph L2["车载接口层"]
-        Sensors["传感器与驱动"]
-        Canbus["Canbus / 底盘状态"]
-    end
-
-    subgraph L3["环境理解层"]
-        Localization["Localization 定位"]
-        Perception["Perception 感知"]
-        Prediction["Prediction 预测"]
-        Map["HD Map / Routing"]
-    end
-
-    subgraph L4["决策与规划层"]
-        Planning["Planning 规划"]
-        Scenario["Scenario / Stage / Task"]
-    end
-
-    subgraph L5["控制与执行层"]
-        Control["Control 控制"]
-        Chassis["车辆底盘执行"]
-    end
-
-    subgraph Platform["横向基础设施"]
-        Cyber["Cyber 通信"]
-        Tools["AEM / buildtool"]
-        DreamView["DreamView 可视化"]
-    end
-
-    Env --> Sensors
-    Env --> Canbus
-    Sensors --> Localization
-    Sensors --> Perception
-    Canbus --> Localization
-    Localization --> Perception
-    Perception --> Prediction
-    Map --> Perception
-    Map --> Planning
-    Localization --> Planning
-    Perception --> Planning
-    Prediction --> Planning
-    Planning --> Scenario
-    Scenario --> Planning
-    Planning --> Control
-    Control --> Chassis
-    Cyber -.模块通信.-> Perception
-    Cyber -.模块通信.-> Planning
-    Cyber -.模块通信.-> Control
-    DreamView -.观察.-> Planning
-    Tools -.构建和启动.-> Planning
-```
+<figure class="lesson-illustration">
+  <img src="assets/images/anime-apollo-architecture-flow.webp" alt="动漫风 Apollo 分层架构流程图" loading="lazy">
+  <figcaption><strong>动漫风架构流程图：</strong>主链路为 ENVIRONMENT -> VEHICLE INTERFACE -> UNDERSTAND -> PLANNING -> CONTROL -> EXECUTION；VEHICLE INTERFACE 包含 SENSOR、CANBUS，UNDERSTAND 包含 LOCALIZATION、PERCEPTION、PREDICTION、MAP ROUTING，PLANNING 内部包含 SCENARIO、STAGE、TASK，底部的 PLATFORM 表示 CYBER、AEM、BUILD、DREAMVIEW 等横向基础设施。</figcaption>
+</figure>
 
 读图时抓住三条线：
 
