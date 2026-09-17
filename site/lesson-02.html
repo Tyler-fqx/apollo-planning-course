@@ -6,6 +6,7 @@
     <meta name="description" content="从 Proc、LocalView、RunOnce、Frame 到 ADCTrajectory，建立一轮规划的主调用链。">
     <title>Planning 一轮流程 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-02">
@@ -62,6 +63,15 @@
 <li><input disabled="" type="checkbox"> 能用一张图解释一轮规划。</li>
 </ul>
 <h2 id="3-一轮规划的总图">3. 一轮规划的总图</h2>
+<pre><code class="language-mermaid">flowchart LR
+    A[&quot;上游输入&quot;] --&gt; B[&quot;PlanningComponent::Proc&quot;]
+    B --&gt; C[&quot;LocalView&quot;]
+    C --&gt; D[&quot;OnLanePlanning::RunOnce&quot;]
+    D --&gt; E[&quot;Frame&quot;]
+    E --&gt; F[&quot;TrafficDecider + Plan&quot;]
+    F --&gt; G[&quot;ADCTrajectory&quot;]
+    G --&gt; H[&quot;planning_writer_-&gt;Write&quot;]
+</code></pre>
 <pre><code class="language-text">上游输入
   -&gt; PlanningComponent::Proc
   -&gt; LocalView
@@ -75,7 +85,12 @@
 <p>先记住一句话：</p>
 <pre><code class="language-text">Proc 接数据并触发规划，RunOnce 组织一轮流程，Plan 负责真正计算。
 </code></pre>
-<h2 id="4-源码地图">4. 源码地图</h2>
+<figure class="lesson-illustration">
+  <img src="assets/images/planning-factory-comic.webp" alt="Planning 从输入到轨迹输出的工厂流水线漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 2：</strong>把一轮 Planning 想成工厂流水线：输入数据进门，经过 Frame、Planner、Scenario、Stage 和 Task，最后输出轨迹。配合上方的 Mermaid 图阅读。</figcaption>
+</figure>
+## 4. 源码地图
+
 <table>
 <thead>
 <tr>

@@ -100,6 +100,10 @@ Planning 接收上游信息，向前输出一条轨迹：
                    Control
 ```
 
+<figure class="lesson-illustration">
+  <img src="assets/images/apollo-pipeline-comic.webp" alt="自动驾驶从感知、预测、规划到控制的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 1：</strong>感知负责获取环境，预测负责推测未来，Planning 负责生成轨迹，Control 负责执行。图片里不放文字，避免图像生成时出现乱码。</figcaption>
+</figure>
 ### 3.4 路径和轨迹
 
 路径主要回答：

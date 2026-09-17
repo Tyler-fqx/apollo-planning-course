@@ -18,6 +18,13 @@
 - [ ] 解释最终路径如何写入 ReferenceLineInfo。
 
 ## 3. 类定义
+```mermaid
+flowchart LR
+    P["LaneFollowPath::Process"] --> A["DecidePathBounds<br/>确定路径边界"]
+    A --> B["OptimizePath<br/>生成候选路径"]
+    B --> C["AssessPath<br/>评估并选择路径"]
+    C --> D["ReferenceLineInfo::path_data"]
+```
 
 > 源码位置：`modules/planning/tasks/lane_follow_path/lane_follow_path.h`，约第 30～56 行。
 

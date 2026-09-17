@@ -18,6 +18,21 @@
 - [ ] 找到路径与速度轨迹的合并位置。
 
 ## 3. Stage 的核心循环
+```mermaid
+sequenceDiagram
+    participant S as Stage
+    participant T as Task
+    participant R as ReferenceLineInfo
+    S->>T: Execute(frame, R)
+    T->>R: 读取输入 / 写入结果
+    T-->>S: Status
+    alt Status OK
+        S->>T: 执行下一个 Task
+    else Status Error
+        S->>S: 停止任务链
+        S->>S: 执行 fallback task
+    end
+```
 
 > 源码位置：`modules/planning/planning_interface_base/scenario_base/stage.cc`，约第 101～157 行。
 

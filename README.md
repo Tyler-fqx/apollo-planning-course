@@ -233,3 +233,23 @@ site/index.html
 ```powershell
 & 'C:\Users\FQX\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe' tools\test-site.cjs
 ```
+## 图表与插图
+
+网站使用两种视觉辅助方式：
+
+- Mermaid：用于调用链、继承关系、状态机、数据流和 Task 流程。
+- 漫画插图：用于建立直觉，统一为浅色纸张、Apollo 蓝和安全琥珀风格。
+
+Mermaid 运行库保存在本地：
+
+```text
+site/assets/vendor/mermaid/mermaid.min.js
+```
+
+漫画插图使用 WebP 格式保存在：
+
+```text
+site/assets/images/*.webp
+```
+
+原始 PNG 和生图提示词保留在本地 `generated/`，不进入公开仓库。所有插图均不放中文文字，避免图像模型中文字乱码；具体含义由网页标题、正文和图注解释。

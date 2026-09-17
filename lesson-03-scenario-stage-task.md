@@ -18,6 +18,16 @@
 - [ ] 解释为什么 Task 会按顺序执行。
 
 ## 3. 概念模型
+```mermaid
+flowchart TD
+    S["Scenario<br/>当前驾驶情境"] --> G["Stage<br/>当前处理阶段"]
+    G --> T1["Task<br/>路径任务"]
+    G --> T2["Task<br/>速度任务"]
+    G --> T3["Task<br/>决策任务"]
+    T1 --> R["ReferenceLineInfo<br/>共享中间结果"]
+    T2 --> R
+    T3 --> R
+```
 
 | 概念 | 一句话 | 生活类比 |
 | --- | --- | --- |
@@ -35,6 +45,10 @@ Scenario
       -> Task
 ```
 
+<figure class="lesson-illustration">
+  <img src="assets/images/scenario-stage-task-comic.webp" alt="Scenario、Stage、Task 三层关系的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 3：</strong>Scenario 像“遇到什么交通情况”，Stage 像“处理到哪一步”，Task 像“这一小步具体做什么”。</figcaption>
+</figure>
 ## 4. 源码地图
 
 | 文件 | 本课关注内容 |

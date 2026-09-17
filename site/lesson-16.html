@@ -6,6 +6,7 @@
     <meta name="description" content="比较 Task 和 TrafficRule，阅读 TrafficDecider 与 TrafficLight 的规则执行方式。">
     <title>TrafficRule 与 Task 的区别 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-16">
@@ -62,6 +63,17 @@
 <li><input disabled="" type="checkbox"> 知道什么时候应该新增 Task，什么时候应该新增 TrafficRule。</li>
 </ul>
 <h2 id="3-基本区别">3. 基本区别</h2>
+<pre><code class="language-mermaid">flowchart TD
+    D[&quot;TrafficDecider&quot;] --&gt; R1[&quot;TrafficLight&quot;]
+    D --&gt; R2[&quot;StopSign&quot;]
+    D --&gt; R3[&quot;Crosswalk&quot;]
+    D --&gt; R4[&quot;YieldSign&quot;]
+    R1 --&gt; F[&quot;Frame + ReferenceLineInfo&quot;]
+    R2 --&gt; F
+    R3 --&gt; F
+    R4 --&gt; F
+    F --&gt; P[&quot;停车 / 让行 / 规划目标&quot;]
+</code></pre>
 <table>
 <thead>
 <tr>

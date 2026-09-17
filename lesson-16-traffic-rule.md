@@ -18,6 +18,18 @@
 - [ ] 知道什么时候应该新增 Task，什么时候应该新增 TrafficRule。
 
 ## 3. 基本区别
+```mermaid
+flowchart TD
+    D["TrafficDecider"] --> R1["TrafficLight"]
+    D --> R2["StopSign"]
+    D --> R3["Crosswalk"]
+    D --> R4["YieldSign"]
+    R1 --> F["Frame + ReferenceLineInfo"]
+    R2 --> F
+    R3 --> F
+    R4 --> F
+    F --> P["停车 / 让行 / 规划目标"]
+```
 
 | 项目 | Task | TrafficRule |
 | --- | --- | --- |

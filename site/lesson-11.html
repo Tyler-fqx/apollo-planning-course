@@ -6,6 +6,7 @@
     <meta name="description" content="拆解最常用的默认场景、切入条件、LaneFollowStage 和完整 Task pipeline。">
     <title>LaneFollow 场景 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-11">
@@ -62,6 +63,14 @@
 <li><input disabled="" type="checkbox"> 理解 LaneFollow 为什么经常作为默认场景。</li>
 </ul>
 <h2 id="3-lanefollow-是什么">3. LaneFollow 是什么</h2>
+<pre><code class="language-mermaid">flowchart LR
+    S[&quot;LaneFollowScenario&quot;] --&gt; G[&quot;LaneFollowStage&quot;]
+    G --&gt; T1[&quot;LaneChangePath&quot;]
+    G --&gt; T2[&quot;LaneFollowPath&quot;]
+    G --&gt; T3[&quot;PathDecider&quot;]
+    G --&gt; T4[&quot;SpeedBoundsDecider&quot;]
+    G --&gt; T5[&quot;PiecewiseJerkSpeedOptimizer&quot;]
+</code></pre>
 <p>LaneFollow 表示：</p>
 <pre><code class="language-text">车辆沿着路由路线继续行驶
 在当前车道处理障碍物、路径和速度

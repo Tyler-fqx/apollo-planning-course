@@ -94,6 +94,10 @@ DreamView 用来观察模块是否启动、Planning 是否有输入和输出、�
 
 DreamView 不是日志替代品。轨迹异常时仍要回到源码和日志。
 
+<figure class="lesson-illustration">
+  <img src="assets/images/debug-detective-comic.webp" alt="使用日志、DreamView 和规划流水线排查问题的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 6：</strong>调试像侦探工作：先看输入和日志，再看 DreamView 和轨迹，最后定位到失败的具体 Task。</figcaption>
+</figure>
 ## 6. 调试顺序
 
 固定按下面顺序排查：

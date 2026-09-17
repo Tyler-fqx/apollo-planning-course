@@ -35,6 +35,10 @@ Frame* frame_ptr
   -> 通过这个地址可以找到 Frame 对象
 ```
 
+<figure class="lesson-illustration">
+  <img src="assets/images/cpp-pointers-comic.webp" alt="C++ 指针、引用和空指针的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 4：</strong>指针箭头指向真实对象，引用像对象的第二个名字，空指针则像一个没有对象的空门。</figcaption>
+</figure>
 ## 4. 指针声明
 
 > 源码位置：`modules/planning/planning_interface_base/task_base/task.h`，约第 49～51 行。

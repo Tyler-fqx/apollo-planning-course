@@ -6,6 +6,7 @@
     <meta name="description" content="阅读路径边界、路径优化、路径评估和写入 ReferenceLineInfo 的完整流程。">
     <title>路径 Task 示例 LaneFollowPath | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-14">
@@ -62,6 +63,12 @@
 <li><input disabled="" type="checkbox"> 解释最终路径如何写入 ReferenceLineInfo。</li>
 </ul>
 <h2 id="3-类定义">3. 类定义</h2>
+<pre><code class="language-mermaid">flowchart LR
+    P[&quot;LaneFollowPath::Process&quot;] --&gt; A[&quot;DecidePathBounds&lt;br/&gt;确定路径边界&quot;]
+    A --&gt; B[&quot;OptimizePath&lt;br/&gt;生成候选路径&quot;]
+    B --&gt; C[&quot;AssessPath&lt;br/&gt;评估并选择路径&quot;]
+    C --&gt; D[&quot;ReferenceLineInfo::path_data&quot;]
+</code></pre>
 <blockquote>
 <p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.h</code>，约第 30～56 行。</p>
 </blockquote>

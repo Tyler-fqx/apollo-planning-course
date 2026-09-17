@@ -15,6 +15,70 @@
   store.completed = store.completed || {};
   store.checklists = store.checklists || {};
 
+  function mermaidVariables(theme) {
+    const dark = theme === "dark";
+    return {
+      background: dark ? "#17232c" : "#ffffff",
+      primaryColor: dark ? "#152b52" : "#e7efff",
+      primaryTextColor: dark ? "#e8f0f3" : "#14202a",
+      primaryBorderColor: dark ? "#6b9cff" : "#0b5cff",
+      lineColor: dark ? "#b8c5cc" : "#4b5965",
+      secondaryColor: dark ? "#3d3015" : "#fff3d6",
+      tertiaryColor: dark ? "#17352c" : "#e0f2eb",
+      fontFamily: "Noto Sans SC, Source Han Sans SC, Microsoft YaHei, sans-serif"
+    };
+  }
+
+  function prepareMermaidNodes() {
+    document.querySelectorAll(".lesson-content pre > code.language-mermaid").forEach((code) => {
+      const pre = code.parentElement;
+      if (!pre) return;
+      const diagram = document.createElement("div");
+      diagram.className = "mermaid";
+      diagram.dataset.source = code.textContent;
+      diagram.textContent = code.textContent;
+      pre.replaceWith(diagram);
+    });
+  }
+
+  async function renderMermaid(force = false) {
+    if (!window.mermaid) return;
+    prepareMermaidNodes();
+    const nodes = Array.from(document.querySelectorAll(".lesson-content .mermaid"));
+    if (!nodes.length) return;
+
+    const nextTheme = root.dataset.theme;
+    nodes.forEach((node) => {
+      if (!force && node.dataset.renderedTheme === nextTheme) return;
+      node.removeAttribute("data-processed");
+      node.innerHTML = node.dataset.source || node.textContent;
+    });
+
+    window.mermaid.initialize({
+      startOnLoad: false,
+      securityLevel: "strict",
+      theme: "base",
+      themeVariables: mermaidVariables(nextTheme),
+      flowchart: { curve: "basis", htmlLabels: true, useMaxWidth: true },
+      sequence: { useMaxWidth: true },
+      state: { useMaxWidth: true },
+      class: { useMaxWidth: true }
+    });
+
+    for (const node of nodes) {
+      if (!force && node.dataset.renderedTheme === nextTheme) continue;
+      try {
+        await window.mermaid.run({ nodes: [node] });
+        node.dataset.renderedTheme = nextTheme;
+        node.classList.remove("mermaid-error");
+      } catch (error) {
+        node.classList.add("mermaid-error");
+        node.textContent = "Mermaid 图渲染失败：" + error.message;
+        console.error(error);
+      }
+    }
+  }
+
   function setTheme(theme) {
     root.dataset.theme = theme;
     document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
@@ -30,6 +94,7 @@
       const next = root.dataset.theme === "dark" ? "light" : "dark";
       localStorage.setItem("apollo-planning-theme", next);
       setTheme(next);
+      window.setTimeout(() => renderMermaid(true), 50);
     });
   });
 
@@ -229,6 +294,12 @@
       closeMenu();
     }
   });
+
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", () => renderMermaid(false));
+  } else {
+    renderMermaid(false);
+  }
 
   updateProgressUI();
 })();

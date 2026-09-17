@@ -19,6 +19,17 @@
 - [ ] 编译并在日志中验证它确实执行。
 
 ## 3. 为什么先做日志 Task
+```mermaid
+stateDiagram-v2
+    [*] --> Created
+    Created --> Initialized: Init()
+    Initialized --> Executing: Execute()
+    Executing --> OK: Process() 返回 OK
+    Executing --> Error: Process() 返回错误
+    Error --> Fallback: 错误处理 / fallback
+    OK --> [*]
+    Fallback --> [*]
+```
 
 直接修改路径或速度很容易让仿真失败。
 

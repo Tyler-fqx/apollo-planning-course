@@ -379,3 +379,73 @@ body[data-page="home"] .menu-button { display: none !important; }
     }
   }
 }
+/* Mermaid 图表容器 */
+.lesson-content .mermaid {
+  margin: 30px 0;
+  padding: 20px;
+  overflow-x: auto;
+  border: 1px solid color-mix(in srgb, var(--blue) 24%, var(--line));
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 92%, var(--blue-soft));
+  text-align: center;
+  box-shadow: var(--shadow-soft);
+}
+
+.lesson-content .mermaid svg {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+}
+
+.lesson-content .mermaid-error {
+  border-color: var(--red);
+  background: var(--red-soft);
+  color: var(--red);
+  text-align: left;
+}
+
+/* 漫画风辅助插图 */
+.lesson-illustration {
+  margin: 34px 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-soft);
+}
+
+.lesson-illustration img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--surface-muted);
+}
+
+.lesson-illustration figcaption {
+  padding: 14px 18px 16px;
+  border-top: 1px solid var(--line);
+  color: var(--ink-soft);
+  font-size: 0.84rem;
+  line-height: 1.65;
+}
+
+.lesson-illustration figcaption strong {
+  color: var(--ink);
+}
+
+@media (max-width: 620px) {
+  .lesson-content .mermaid {
+    margin-right: -12px;
+    margin-left: -12px;
+    padding: 12px;
+    border-radius: 0;
+  }
+
+  .lesson-illustration {
+    margin-right: -12px;
+    margin-left: -12px;
+    border-radius: 0;
+  }
+}

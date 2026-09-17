@@ -97,13 +97,15 @@ function searchDialog() {
   </div>`;
 }
 
-function head(title, description) {
+function head(title, description, includeMermaid = false) {
+  const mermaidScript = includeMermaid ? `<script defer src="assets/vendor/mermaid/mermaid.min.js"></script>` : "";
   return `<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="${escapeHtml(description)}">
     <title>${escapeHtml(title)} | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    ${mermaidScript}
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>`;
 }
@@ -122,7 +124,7 @@ function renderLessonPage(lesson, body, prev, next) {
 
   return `<!doctype html>
 <html lang="zh-CN">
-${head(lesson.title, lesson.summary)}
+${head(lesson.title, lesson.summary, body.includes("language-mermaid"))}
 <body data-page="lesson" data-lesson-id="${lesson.id}">
   <a class="skip-link" href="#main-content">跳到正文</a>
   ${topbar()}
@@ -195,6 +197,13 @@ function renderHome() {
           <ol class="route-steps">${routeSteps}</ol>
         </div>
       </div>
+    </section>
+
+    <section class="page-section">
+      <figure class="lesson-illustration reveal">
+        <img src="assets/images/apollo-pipeline-comic.webp" alt="Apollo 从感知、预测、规划到控制的漫画示意" loading="lazy">
+        <figcaption><strong>先建立一条完整链路：</strong>感知看环境，预测猜未来，Planning 生成轨迹，Control 执行动作。后面的 21 课都围绕这条链路逐步展开。</figcaption>
+      </figure>
     </section>
 
     <section class="page-section">

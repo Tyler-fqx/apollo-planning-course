@@ -6,6 +6,7 @@
     <meta name="description" content="理解 Task -&gt; PathGeneration -&gt; LaneFollowPath 的继承链和插件多态。">
     <title>继承、虚函数与 override | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-08">
@@ -80,6 +81,23 @@ class Dog : public Animal {
 <li>代码可以通过 <code>Animal*</code> 统一调用不同具体对象。</li>
 </ul>
 <h2 id="4-task-的真实继承链">4. Task 的真实继承链</h2>
+<pre><code class="language-mermaid">classDiagram
+    class Task {
+        +Init()
+        +Execute()
+    }
+    class PathGeneration {
+        +Execute()
+        #Process()
+    }
+    class LaneFollowPath {
+        +Init()
+        -Process()
+        -config_
+    }
+    Task &lt;|-- PathGeneration
+    PathGeneration &lt;|-- LaneFollowPath
+</code></pre>
 <blockquote>
 <p>源码位置：</p>
 <ul>

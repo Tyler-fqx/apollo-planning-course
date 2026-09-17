@@ -5,3 +5,4 @@ Thumbs.db
 tools/debug-*.cjs
 tools/check-*.cjs
 site/screenshots/
+generated/

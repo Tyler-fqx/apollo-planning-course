@@ -18,6 +18,15 @@
 - [ ] 理解 LaneFollow 为什么经常作为默认场景。
 
 ## 3. LaneFollow 是什么
+```mermaid
+flowchart LR
+    S["LaneFollowScenario"] --> G["LaneFollowStage"]
+    G --> T1["LaneChangePath"]
+    G --> T2["LaneFollowPath"]
+    G --> T3["PathDecider"]
+    G --> T4["SpeedBoundsDecider"]
+    G --> T5["PiecewiseJerkSpeedOptimizer"]
+```
 
 LaneFollow 表示：
 

@@ -161,6 +161,15 @@ void ScenarioManager::Reset(Frame* frame) {
 默认场景通常是 LaneFollow。它适合作为“没有更特殊交通事件时”的基础场景。
 
 ## 7. 完整切换流程
+```mermaid
+stateDiagram-v2
+    [*] --> LaneFollow
+    LaneFollow --> StopSign: 进入停止牌场景
+    StopSign --> LaneFollow: 停止牌处理完成
+    LaneFollow --> TrafficLight: 进入交通灯场景
+    TrafficLight --> LaneFollow: 交通灯处理完成
+    LaneFollow --> PullOver: 到达终点附近
+```
 
 ```text
 ScenarioManager::Init

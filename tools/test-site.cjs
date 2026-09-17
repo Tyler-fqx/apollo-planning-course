@@ -41,7 +41,23 @@ const fileUrl = (name) => "file:///" + path.join(siteRoot, name).replaceAll("\\"
       const content = await page.locator(".lesson-content").innerText();
       if (!content.includes("源码位置")) throw new Error(`Lesson ${number} is missing source locations`);
     }
+    if ([2, 3, 8, 10, 11, 12, 14, 15, 16, 18, 20].includes(i)) {
+      await page.waitForSelector(".lesson-content .mermaid svg", { timeout: 15000 });
+    }
+    if ([1, 2, 3, 5, 15, 19].includes(i)) {
+      const image = page.locator(".lesson-illustration img").first();
+      await image.scrollIntoViewIfNeeded();
+      await page.waitForTimeout(350);
+      const imageLoaded = await image.evaluate((img) => img.complete && img.naturalWidth > 0);
+      if (!imageLoaded) throw new Error(`Lesson ${number} illustration failed to load`);
+    }
   }
+
+  await page.goto(fileUrl("lesson-02.html"), { waitUntil: "networkidle" });
+  await page.waitForSelector(".lesson-content .mermaid svg", { timeout: 15000 });
+  await page.locator("[data-theme-toggle]").click();
+  await page.waitForTimeout(250);
+  if ((await page.locator(".lesson-content .mermaid svg").count()) < 1) throw new Error("Mermaid failed after theme toggle");
 
   await page.goto(fileUrl("lesson-00.html"), { waitUntil: "networkidle" });
   const initialTheme = await page.locator("html").getAttribute("data-theme");

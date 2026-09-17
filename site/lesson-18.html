@@ -6,6 +6,7 @@
     <meta name="description" content="从零实现一个只记录日志的 Task，完成注册、配置、编译和执行验证。">
     <title>新增一个简单 Task | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-18">
@@ -63,6 +64,16 @@
 <li><input disabled="" type="checkbox"> 编译并在日志中验证它确实执行。</li>
 </ul>
 <h2 id="3-为什么先做日志-task">3. 为什么先做日志 Task</h2>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Created
+    Created --&gt; Initialized: Init()
+    Initialized --&gt; Executing: Execute()
+    Executing --&gt; OK: Process() 返回 OK
+    Executing --&gt; Error: Process() 返回错误
+    Error --&gt; Fallback: 错误处理 / fallback
+    OK --&gt; [*]
+    Fallback --&gt; [*]
+</code></pre>
 <p>直接修改路径或速度很容易让仿真失败。</p>
 <p>日志 Task 的目标：</p>
 <pre><code class="language-text">不改变规划结果

@@ -6,6 +6,7 @@
     <meta name="description" content="理解任务循环、Status 失败中断、fallback task 和路径速度合并。">
     <title>Stage 如何执行 Task | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-12">
@@ -62,6 +63,20 @@
 <li><input disabled="" type="checkbox"> 找到路径与速度轨迹的合并位置。</li>
 </ul>
 <h2 id="3-stage-的核心循环">3. Stage 的核心循环</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    participant S as Stage
+    participant T as Task
+    participant R as ReferenceLineInfo
+    S-&gt;&gt;T: Execute(frame, R)
+    T-&gt;&gt;R: 读取输入 / 写入结果
+    T--&gt;&gt;S: Status
+    alt Status OK
+        S-&gt;&gt;T: 执行下一个 Task
+    else Status Error
+        S-&gt;&gt;S: 停止任务链
+        S-&gt;&gt;S: 执行 fallback task
+    end
+</code></pre>
 <blockquote>
 <p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 101～157 行。</p>
 </blockquote>

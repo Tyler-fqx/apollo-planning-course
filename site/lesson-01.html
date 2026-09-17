@@ -6,6 +6,7 @@
     <meta name="description" content="建立 Apollo 与 Planning 的整体地图，认识 Component、Planner、Scenario、Stage 和 Task。">
     <title>Apollo 与 Planning 全景地图 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-01">
@@ -161,7 +162,12 @@ DreamView 负责观察仿真
                       v
                    Control
 </code></pre>
-<h3 id="3-4-路径和轨迹">3.4 路径和轨迹</h3>
+<figure class="lesson-illustration">
+  <img src="assets/images/apollo-pipeline-comic.webp" alt="自动驾驶从感知、预测、规划到控制的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 1：</strong>感知负责获取环境，预测负责推测未来，Planning 负责生成轨迹，Control 负责执行。图片里不放文字，避免图像生成时出现乱码。</figcaption>
+</figure>
+### 3.4 路径和轨迹
+
 <p>路径主要回答：</p>
 <pre><code class="language-text">车辆要沿什么几何路线走
 </code></pre>

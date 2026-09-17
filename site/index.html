@@ -6,6 +6,7 @@
     <meta name="description" content="从 Linux 仿真环境出发，学习 Apollo Planning 架构、Scenario、Task 与 C++ 基础。">
     <title>Apollo Planning 小白自学路线 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="home">
@@ -38,6 +39,13 @@
           <ol class="route-steps"><li class="route-step is-active" data-route-unit="lesson-00"><span class="route-node" aria-hidden="true"></span><span><strong>准备 Linux 环境</strong><small>虚拟机、双系统或 WSL2，先让 Apollo 跑起来。</small></span><span class="route-state">可学习</span></li><li class="route-step " data-route-unit="lesson-01"><span class="route-node" aria-hidden="true"></span><span><strong>建立 Apollo 地图</strong><small>知道 Planning 在哪里，以及 Scenario、Stage、Task 的关系。</small></span><span class="route-state">可学习</span></li><li class="route-step " data-route-unit="lesson-02"><span class="route-node" aria-hidden="true"></span><span><strong>看懂一轮 Planning</strong><small>从输入到轨迹，只看主线，不先钻算法。</small></span><span class="route-state">下一步</span></li><li class="route-step " data-route-unit="lesson-10"><span class="route-node" aria-hidden="true"></span><span><strong>深入 Scenario 与 Task</strong><small>围绕常见场景和任务读源码。</small></span><span class="route-state">规划中</span></li><li class="route-step " data-route-unit="lesson-15"><span class="route-node" aria-hidden="true"></span><span><strong>补齐 C++ 生存技能</strong><small>指针、引用、类和继承，只为读懂项目服务。</small></span><span class="route-state">规划中</span></li><li class="route-step " data-route-unit="lesson-20"><span class="route-node" aria-hidden="true"></span><span><strong>完成小型实战</strong><small>修改一个简单任务并运行验证。</small></span><span class="route-state">规划中</span></li></ol>
         </div>
       </div>
+    </section>
+
+    <section class="page-section">
+      <figure class="lesson-illustration reveal">
+        <img src="assets/images/apollo-pipeline-comic.webp" alt="Apollo 从感知、预测、规划到控制的漫画示意" loading="lazy">
+        <figcaption><strong>先建立一条完整链路：</strong>感知看环境，预测猜未来，Planning 生成轨迹，Control 执行动作。后面的 21 课都围绕这条链路逐步展开。</figcaption>
+      </figure>
     </section>
 
     <section class="page-section">

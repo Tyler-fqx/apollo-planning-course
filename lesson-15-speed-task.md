@@ -44,6 +44,16 @@ class SpeedBoundsDecider : public Decider {
 ```
 
 ## 4. S-T 图的直觉
+```mermaid
+flowchart TD
+    P["PathData<br/>已生成路径"] --> M["STBoundaryMapper"]
+    M --> B["S-T 边界"]
+    P --> L["SpeedLimitDecider"]
+    L --> S["速度上限"]
+    B --> G["StGraphData"]
+    S --> G
+    G --> O["后续速度优化器"]
+```
 
 S-T 图：
 
@@ -60,6 +70,10 @@ S-T 图：
 
 速度规划必须避开这些不可通行的时空区域。
 
+<figure class="lesson-illustration">
+  <img src="assets/images/speed-st-graph-comic.webp" alt="S-T 图和速度规划的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 5：</strong>车辆不仅要避开空间里的障碍物，还要避开 S-T 图中“某个时间不能进入某个位置”的禁区。</figcaption>
+</figure>
 ## 5. Process 主流程
 
 > 源码位置：`modules/planning/tasks/speed_bounds_decider/speed_bounds_decider.cc`，约第 53～110 行。

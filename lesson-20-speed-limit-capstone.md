@@ -22,6 +22,17 @@
 - [ ] 会使用日志和 DreamView 验证。
 
 ## 3. 找到修改点
+```mermaid
+flowchart TD
+    C["region_speed_cap 配置"] --> G["SpeedLimitDecider::GetSpeedLimits"]
+    G --> V["当前 curr_speed_limit"]
+    V --> Q{"cap > 0 ?"}
+    Q -- 是 --> M["curr = min(curr, cap)"]
+    Q -- 否 --> K["保持原速度限制"]
+    M --> A["AppendSpeedLimit"]
+    K --> A
+    A --> S["StGraphData / 速度优化"]
+```
 
 > 源码位置：`modules/planning/tasks/speed_bounds_decider/speed_limit_decider.cc`，约第 45～171 行。
 

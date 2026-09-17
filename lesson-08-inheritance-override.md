@@ -39,6 +39,24 @@ class Dog : public Animal {
 - 代码可以通过 `Animal*` 统一调用不同具体对象。
 
 ## 4. Task 的真实继承链
+```mermaid
+classDiagram
+    class Task {
+        +Init()
+        +Execute()
+    }
+    class PathGeneration {
+        +Execute()
+        #Process()
+    }
+    class LaneFollowPath {
+        +Init()
+        -Process()
+        -config_
+    }
+    Task <|-- PathGeneration
+    PathGeneration <|-- LaneFollowPath
+```
 
 > 源码位置：
 > - `modules/planning/planning_interface_base/task_base/common/path_generation.h`，约第 31 行。

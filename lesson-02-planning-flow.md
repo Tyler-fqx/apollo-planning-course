@@ -18,6 +18,16 @@
 - [ ] 能用一张图解释一轮规划。
 
 ## 3. 一轮规划的总图
+```mermaid
+flowchart LR
+    A["上游输入"] --> B["PlanningComponent::Proc"]
+    B --> C["LocalView"]
+    C --> D["OnLanePlanning::RunOnce"]
+    D --> E["Frame"]
+    E --> F["TrafficDecider + Plan"]
+    F --> G["ADCTrajectory"]
+    G --> H["planning_writer_->Write"]
+```
 
 ```text
 上游输入
@@ -37,6 +47,10 @@
 Proc 接数据并触发规划，RunOnce 组织一轮流程，Plan 负责真正计算。
 ```
 
+<figure class="lesson-illustration">
+  <img src="assets/images/planning-factory-comic.webp" alt="Planning 从输入到轨迹输出的工厂流水线漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 2：</strong>把一轮 Planning 想成工厂流水线：输入数据进门，经过 Frame、Planner、Scenario、Stage 和 Task，最后输出轨迹。配合上方的 Mermaid 图阅读。</figcaption>
+</figure>
 ## 4. 源码地图
 
 | 文件 | 本课关注内容 |

@@ -6,6 +6,7 @@
     <meta name="description" content="学习场景列表、默认场景、IsTransferable、Exit、Reset 和 Enter。">
     <title>ScenarioManager 与场景切换 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-10">
@@ -188,6 +189,14 @@ void ScenarioManager::Reset(Frame* frame) {
 </code></pre>
 <p>默认场景通常是 LaneFollow。它适合作为“没有更特殊交通事件时”的基础场景。</p>
 <h2 id="7-完整切换流程">7. 完整切换流程</h2>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; LaneFollow
+    LaneFollow --&gt; StopSign: 进入停止牌场景
+    StopSign --&gt; LaneFollow: 停止牌处理完成
+    LaneFollow --&gt; TrafficLight: 进入交通灯场景
+    TrafficLight --&gt; LaneFollow: 交通灯处理完成
+    LaneFollow --&gt; PullOver: 到达终点附近
+</code></pre>
 <pre><code class="language-text">ScenarioManager::Init
   -&gt; 加载配置中的全部场景
   -&gt; scenario_list_ 保存候选场景

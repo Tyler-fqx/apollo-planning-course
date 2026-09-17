@@ -6,6 +6,7 @@
     <meta name="description" content="用生活化模型理解三层结构，并阅读三个基类和 LaneFollow pipeline 配置。">
     <title>Scenario、Stage 和 Task | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-03">
@@ -62,6 +63,15 @@
 <li><input disabled="" type="checkbox"> 解释为什么 Task 会按顺序执行。</li>
 </ul>
 <h2 id="3-概念模型">3. 概念模型</h2>
+<pre><code class="language-mermaid">flowchart TD
+    S[&quot;Scenario&lt;br/&gt;当前驾驶情境&quot;] --&gt; G[&quot;Stage&lt;br/&gt;当前处理阶段&quot;]
+    G --&gt; T1[&quot;Task&lt;br/&gt;路径任务&quot;]
+    G --&gt; T2[&quot;Task&lt;br/&gt;速度任务&quot;]
+    G --&gt; T3[&quot;Task&lt;br/&gt;决策任务&quot;]
+    T1 --&gt; R[&quot;ReferenceLineInfo&lt;br/&gt;共享中间结果&quot;]
+    T2 --&gt; R
+    T3 --&gt; R
+</code></pre>
 <table>
 <thead>
 <tr>
@@ -93,7 +103,12 @@
       -&gt; Task
       -&gt; Task
 </code></pre>
-<h2 id="4-源码地图">4. 源码地图</h2>
+<figure class="lesson-illustration">
+  <img src="assets/images/scenario-stage-task-comic.webp" alt="Scenario、Stage、Task 三层关系的漫画示意" loading="lazy">
+  <figcaption><strong>漫画图 3：</strong>Scenario 像“遇到什么交通情况”，Stage 像“处理到哪一步”，Task 像“这一小步具体做什么”。</figcaption>
+</figure>
+## 4. 源码地图
+
 <table>
 <thead>
 <tr>
