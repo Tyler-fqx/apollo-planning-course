@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="用 Vec2d 和 LaneFollowPath 学习类、对象、构造函数、封装和成员函数。">
+    <title>类、对象与构造函数 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-07">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07" aria-current="page"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 07 - C++ Survival</p>
+          <h1>类、对象与构造函数</h1>
+          <p class="lesson-summary">用 Vec2d 和 LaneFollowPath 学习类、对象、构造函数、封装和成员函数。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 140 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 06 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。用二维向量 <code>Vec2d</code> 学习类的基本结构，再回到 Task。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～140 分钟。</li>
+<li>难度：基础。</li>
+<li>前置：第 06 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 解释类和对象的关系。</li>
+<li><input disabled="" type="checkbox"> 识别 public、protected、private。</li>
+<li><input disabled="" type="checkbox"> 看懂构造函数和成员初始化列表。</li>
+<li><input disabled="" type="checkbox"> 理解成员函数末尾的 <code>const</code>。</li>
+<li><input disabled="" type="checkbox"> 能把 <code>Vec2d</code> 的知识迁移到 Task 类。</li>
+</ul>
+<h2 id="3-类和对象">3. 类和对象</h2>
+<p>类可以理解为图纸，对象是按图纸创建出来的实例。</p>
+<pre><code class="language-text">Vec2d 是类
+Vec2d point(1.0, 2.0) 是对象
+</code></pre>
+<p>Apollo 中：</p>
+<pre><code class="language-text">Task 是基类接口
+LaneFollowPath 是具体任务类
+SpeedBoundsDecider 也是具体任务类
+</code></pre>
+<h2 id="4-阅读-vec2d-类">4. 阅读 Vec2d 类</h2>
+<blockquote>
+<p>源码位置：<code>modules/common/math/vec2d.h</code>，约第 37～112 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：vec2d.h，约第 37 行
+class Vec2d {
+ public:
+  // 构造函数：创建对象时把 x、y 保存到成员变量
+  constexpr Vec2d(const double x, const double y) noexcept : x_(x), y_(y) {}
+
+  // 默认构造函数：委托给 Vec2d(0, 0)
+  constexpr Vec2d() noexcept : Vec2d(0, 0) {}
+
+  // 读取 x，const 表示不会修改当前对象
+  double x() const { return x_; }
+
+  // 读取 y
+  double y() const { return y_; }
+
+  // 修改 x
+  void set_x(const double x) { x_ = x; }
+
+ protected:
+  // 类的内部数据，外部不能直接访问
+  double x_ = 0.0;
+  double y_ = 0.0;
+};
+</code></pre>
+<h2 id="5-构造函数">5. 构造函数</h2>
+<pre><code class="language-cpp">// 教学代码
+Vec2d origin;              // 调用无参构造，得到 (0, 0)
+Vec2d point(3.0, 4.0);     // 调用有参构造，得到 (3, 4)
+</code></pre>
+<p>成员初始化列表：</p>
+<pre><code class="language-cpp">Vec2d(const double x, const double y) : x_(x), y_(y) {}
+</code></pre>
+<p>含义：</p>
+<ul>
+<li>冒号前是构造函数。</li>
+<li><code>x_(x)</code> 表示用参数 <code>x</code> 初始化成员 <code>x_</code>。</li>
+<li><code>y_(y)</code> 同理。</li>
+</ul>
+<h2 id="6-成员函数和封装">6. 成员函数和封装</h2>
+<pre><code class="language-cpp">// 教学代码
+Vec2d point(1.0, 2.0);
+double value = point.x();  // 通过 public 成员函数读取
+point.set_x(5.0);          // 通过 public 成员函数修改
+</code></pre>
+<p>为什么不直接访问 <code>x_</code>？</p>
+<pre><code class="language-text">protected/private 数据由类控制
+外部只能通过公开接口读写
+</code></pre>
+<p>这叫封装。</p>
+<h2 id="7-成员函数末尾的-const">7. 成员函数末尾的 const</h2>
+<pre><code class="language-cpp">double x() const { return x_; }
+</code></pre>
+<p>末尾 <code>const</code> 表示：</p>
+<pre><code class="language-text">这个成员函数不会修改对象自身
+</code></pre>
+<p>因此：</p>
+<ul>
+<li>读取函数通常加 <code>const</code>。</li>
+<li>修改函数如 <code>set_x</code> 不加 <code>const</code>。</li>
+<li><code>const Vec2d&amp; other</code> 只能调用其他对象的 const 成员函数。</li>
+</ul>
+<h2 id="8-运算符重载">8. 运算符重载</h2>
+<blockquote>
+<p>源码位置：<code>modules/common/math/vec2d.h</code>，约第 75～91 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：vec2d.h，约第 75 行
+// 两个 Vec2d 可以直接相减
+Vec2d operator-(const Vec2d&amp; other) const;
+
+// 两个 Vec2d 可以直接相加
+Vec2d operator+(const Vec2d&amp; other) const;
+
+// 判断两个 Vec2d 是否近似相等
+bool operator==(const Vec2d&amp; other) const;
+</code></pre>
+<p>这使得数学代码更自然：</p>
+<pre><code class="language-cpp">Vec2d c = a + b;
+Vec2d delta = p2 - p1;
+</code></pre>
+<h2 id="9-回到-task-类">9. 回到 Task 类</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.h</code>，约第 30～56 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_path.h，约第 30 行
+class LaneFollowPath : public PathGeneration {
+ public:
+  // 初始化当前 Task，并加载自己的配置
+  bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override;
+
+ private:
+  // 真正执行路径生成逻辑
+  apollo::common::Status Process(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+
+  // 当前 LaneFollowPath 的配置对象
+  LaneFollowPathConfig config_;
+};
+</code></pre>
+<p>可以看到类里同时包含：</p>
+<ul>
+<li>对外接口 <code>Init</code>。</li>
+<li>核心逻辑 <code>Process</code>。</li>
+<li>专属数据 <code>config_</code>。</li>
+</ul>
+<h2 id="10-动手实验">10. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class Vec2d|Vec2d\(|double x\(\)|operator\+|protected:&quot; modules\common\math\vec2d.h
+rg -n &quot;class LaneFollowPath|bool Init|Status Process|Config config_&quot; modules\planning\tasks\lane_follow_path\lane_follow_path.h
+</code></pre>
+<p>写一个自己的最小类：</p>
+<pre><code class="language-cpp">// 教学练习：二维点
+class MyPoint {
+ public:
+  MyPoint(double x, double y) : x_(x), y_(y) {}
+  double x() const { return x_; }
+  double y() const { return y_; }
+
+ private:
+  double x_;
+  double y_;
+};
+</code></pre>
+<h2 id="11-常见错误">11. 常见错误</h2>
+<ul>
+<li>把类当成对象。</li>
+<li>忘记构造函数可以在创建时初始化成员。</li>
+<li>以为 <code>protected</code> 和 <code>public</code> 一样。</li>
+<li>在只读 const 成员函数里修改成员变量。</li>
+<li>直接访问类的私有数据，而不是使用公开方法。</li>
+</ul>
+<h2 id="12-自测题">12. 自测题</h2>
+<ol>
+<li>类和对象有什么区别？</li>
+<li>构造函数什么时候执行？</li>
+<li>成员初始化列表是什么？</li>
+<li><code>public</code> 和 <code>protected</code> 的区别是什么？</li>
+<li>成员函数末尾 <code>const</code> 表示什么？</li>
+<li><code>x()</code> 为什么可以直接读取 <code>x_</code>？</li>
+<li>运算符重载解决了什么问题？</li>
+<li><code>LaneFollowPath</code> 中的 <code>config_</code> 表示什么？</li>
+<li><code>Init</code> 和 <code>Process</code> 在类中承担什么不同职责？</li>
+<li>为什么封装有利于大型项目维护？</li>
+</ol>
+<h2 id="13-参考答案">13. 参考答案</h2>
+<ol>
+<li>类是定义，对象是类的实例。</li>
+<li>创建对象时自动执行。</li>
+<li>在构造函数冒号后直接初始化成员变量。</li>
+<li>public 对外可见，protected 主要给本类和子类使用。</li>
+<li>该函数不会修改对象自身。</li>
+<li>因为它是类自己的成员函数，可以访问内部成员。</li>
+<li>让自定义类型支持 <code>+</code>、<code>-</code>、<code>==</code> 等自然运算符。</li>
+<li>当前路径任务的配置参数。</li>
+<li>Init 负责初始化，Process 负责实际执行。</li>
+<li>隐藏内部细节，提供稳定接口，减少外部代码误用。</li>
+</ol>
+<h2 id="14-过关检查">14. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能读懂一个简单类定义。</li>
+<li><input disabled="" type="checkbox"> 能解释构造函数。</li>
+<li><input disabled="" type="checkbox"> 能解释 const 成员函数。</li>
+<li><input disabled="" type="checkbox"> 能读出 Task 类中的接口和数据。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="15-下一课衔接">15. 下一课衔接</h2>
+<p>下一课进入继承、虚函数和 <code>override</code>。你会明白 <code>LaneFollowPath : public PathGeneration</code> 到底是什么意思。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-06.html"><small>上一课</small><strong>06 · C++ 引用与 const</strong></a><a class="page-link next" href="lesson-08.html"><small>下一课</small><strong>08 · 继承、虚函数与 override</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

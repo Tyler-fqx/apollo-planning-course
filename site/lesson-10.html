@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学习场景列表、默认场景、IsTransferable、Exit、Reset 和 Enter。">
+    <title>ScenarioManager 与场景切换 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-10">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10" aria-current="page"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 10 - Scenario</p>
+          <h1>ScenarioManager 与场景切换</h1>
+          <p class="lesson-summary">学习场景列表、默认场景、IsTransferable、Exit、Reset 和 Enter。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 130 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 03、09 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。本课学习 Planning 如何加载场景、维护当前场景并在场景之间切换。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～130 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 03、09 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 说出 ScenarioManager 的职责。</li>
+<li><input disabled="" type="checkbox"> 理解 <code>scenario_list_</code>、<code>current_scenario_</code>、<code>default_scenario_type_</code>。</li>
+<li><input disabled="" type="checkbox"> 解释 <code>IsTransferable</code> 在场景切换中的作用。</li>
+<li><input disabled="" type="checkbox"> 找到默认场景 <code>LANE_FOLLOW</code> 的加载逻辑。</li>
+<li><input disabled="" type="checkbox"> 画出场景切换流程。</li>
+</ul>
+<h2 id="3-scenariomanager-保存什么">3. ScenarioManager 保存什么</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planners/public_road/scenario_manager.h</code>，约第 39～53 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario_manager.h，约第 39 行
+class ScenarioManager final {
+ private:
+  // 依赖注入器：为所有场景提供公共对象
+  std::shared_ptr&lt;DependencyInjector&gt; injector_;
+
+  // 当前正在运行的场景
+  std::shared_ptr&lt;Scenario&gt; current_scenario_;
+
+  // 默认场景，通常配置为 LANE_FOLLOW
+  std::shared_ptr&lt;Scenario&gt; default_scenario_type_;
+
+  // 配置文件中加载的全部候选场景
+  std::vector&lt;std::shared_ptr&lt;Scenario&gt;&gt; scenario_list_;
+};
+</code></pre>
+<p>先记住：</p>
+<pre><code class="language-text">scenario_list_ = 候选场景集合
+current_scenario_ = 本轮实际运行场景
+default_scenario_type_ = 兜底默认场景
+</code></pre>
+<h2 id="4-场景加载">4. 场景加载</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planners/public_road/scenario_manager.cc</code>，约第 33～53 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario_manager.cc，约第 33 行
+bool ScenarioManager::Init(
+    const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector,
+    const PlannerPublicRoadConfig&amp; planner_config) {
+  // 保存公共依赖
+  injector_ = injector;
+
+  // 遍历配置中声明的场景
+  for (int i = 0; i &lt; planner_config.scenario_size(); i++) {
+    // 根据 type 创建具体 Scenario 插件
+    auto scenario = PluginManager::Instance()-&gt;CreateInstance&lt;Scenario&gt;(
+        ConfigUtil::GetFullPlanningClassName(
+            planner_config.scenario(i).type()));
+
+    // 初始化场景，并加入候选列表
+    scenario-&gt;Init(injector_, planner_config.scenario(i).name());
+    scenario_list_.push_back(scenario);
+
+    // 名称是 LANE_FOLLOW 的场景作为默认场景
+    if (planner_config.scenario(i).name() == &quot;LANE_FOLLOW&quot;) {
+      default_scenario_type_ = scenario;
+    }
+  }
+
+  // 初始时默认运行 LaneFollow
+  current_scenario_ = default_scenario_type_;
+  return true;
+}
+</code></pre>
+<p>配置来源：</p>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_component/conf/public_road_planner_config.pb.txt</code>。</p>
+</blockquote>
+<pre><code class="language-text"># 源码位置：public_road_planner_config.pb.txt
+scenario {
+  name: &quot;STOP_SIGN_UNPROTECTED&quot;
+  type: &quot;StopSignUnprotectedScenario&quot;
+}
+scenario {
+  name: &quot;LANE_FOLLOW&quot;
+  type: &quot;LaneFollowScenario&quot;
+}
+</code></pre>
+<h2 id="5-场景切换判断">5. 场景切换判断</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planners/public_road/scenario_manager.cc</code>，约第 56～78 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario_manager.cc，约第 56 行
+void ScenarioManager::Update(const common::TrajectoryPoint&amp; ego_point,
+                             Frame* frame) {
+  // 遍历所有候选场景
+  for (auto scenario : scenario_list_) {
+    // 如果当前场景已经在处理，并且处于高优先级状态，就先不切换
+    if (current_scenario_.get() == scenario.get() &amp;&amp;
+        current_scenario_-&gt;GetStatus() ==
+            ScenarioStatusType::STATUS_PROCESSING) {
+      return;
+    }
+
+    // 询问候选场景：现在能否切换到你自己？
+    if (scenario-&gt;IsTransferable(current_scenario_.get(), *frame)) {
+      // 退出旧场景
+      current_scenario_-&gt;Exit(frame);
+
+      // 切换到新场景并重置场景状态
+      current_scenario_ = scenario;
+      current_scenario_-&gt;Reset();
+
+      // 进入新场景
+      current_scenario_-&gt;Enter(frame);
+      return;
+    }
+  }
+}
+</code></pre>
+<p>一句话：</p>
+<pre><code class="language-text">场景切换不是“强行赋新值”，而是先问每个场景能否接管当前 Frame。
+</code></pre>
+<h2 id="6-重置默认场景">6. 重置默认场景</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planners/public_road/scenario_manager.cc</code>，约第 80～87 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario_manager.cc，约第 80 行
+void ScenarioManager::Reset(Frame* frame) {
+  if (current_scenario_) {
+    // 退出当前场景
+    current_scenario_-&gt;Exit(frame);
+  }
+
+  // 清理默认场景状态
+  default_scenario_type_-&gt;Reset();
+
+  // 重新回到默认场景
+  current_scenario_ = default_scenario_type_;
+}
+</code></pre>
+<p>默认场景通常是 LaneFollow。它适合作为“没有更特殊交通事件时”的基础场景。</p>
+<h2 id="7-完整切换流程">7. 完整切换流程</h2>
+<pre><code class="language-text">ScenarioManager::Init
+  -&gt; 加载配置中的全部场景
+  -&gt; scenario_list_ 保存候选场景
+  -&gt; current_scenario_ 指向默认场景
+
+ScenarioManager::Update
+  -&gt; 遍历 scenario_list_
+  -&gt; 调用候选场景 IsTransferable
+  -&gt; Exit 旧场景
+  -&gt; Reset 新场景
+  -&gt; Enter 新场景
+  -&gt; 后续由 current_scenario_-&gt;Process 运行
+</code></pre>
+<h2 id="8-动手实验">8. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class ScenarioManager|current_scenario_|default_scenario_type_|scenario_list_&quot; modules\planning\planners\public_road\scenario_manager.h
+rg -n &quot;ScenarioManager::Init|CreateInstance&lt;Scenario&gt;|LANE_FOLLOW|IsTransferable|Exit\(|Reset\(|Enter\(&quot; modules\planning\planners\public_road\scenario_manager.cc
+Get-Content modules\planning\planning_component\conf\public_road_planner_config.pb.txt
+</code></pre>
+<p>思考并记录：</p>
+<pre><code class="language-text">默认场景名称：
+候选场景从哪个配置加载：
+哪个函数回答“能不能切换”：
+</code></pre>
+<h2 id="9-常见错误">9. 常见错误</h2>
+<ul>
+<li>以为 <code>scenario_list_</code> 中只有一个场景。</li>
+<li>以为场景切换只看名称，不看 Frame 和交通条件。</li>
+<li>忽略 <code>Exit</code>、<code>Reset</code>、<code>Enter</code> 的调用顺序。</li>
+<li>把默认场景理解为永远不能离开的场景。</li>
+<li>把 <code>current_scenario_</code> 和 <code>default_scenario_type_</code> 当成必然不同对象。</li>
+</ul>
+<h2 id="10-自测题">10. 自测题</h2>
+<ol>
+<li>ScenarioManager 的职责是什么？</li>
+<li><code>scenario_list_</code> 保存什么？</li>
+<li><code>default_scenario_type_</code> 保存什么？</li>
+<li>默认场景通常是哪一个？</li>
+<li><code>IsTransferable</code> 回答什么问题？</li>
+<li>场景切换前为什么要调用 <code>Exit</code>？</li>
+<li>切换到新场景后为什么要 <code>Reset</code> 和 <code>Enter</code>？</li>
+<li>场景配置来自哪个文件？</li>
+<li>为什么初始化时要遍历 <code>planner_config.scenario_size()</code>？</li>
+<li>用一句话概括场景切换。</li>
+</ol>
+<h2 id="11-参考答案">11. 参考答案</h2>
+<ol>
+<li>加载、维护、切换当前 Scenario。</li>
+<li>配置声明的候选场景对象。</li>
+<li>LaneFollow 等默认兜底场景对象。</li>
+<li><code>LANE_FOLLOW</code>。</li>
+<li>当前 Frame 是否允许切换到候选场景。</li>
+<li>让旧场景清理自己的状态或结束逻辑。</li>
+<li>Reset 清理新场景旧状态，Enter 执行进入场景的准备工作。</li>
+<li><code>public_road_planner_config.pb.txt</code>。</li>
+<li>因为配置文件声明了多个候选场景，需要逐个创建。</li>
+<li>根据 Frame 条件从候选场景中选择一个场景接管当前规划。</li>
+</ol>
+<h2 id="12-过关检查">12. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能说明三个场景指针/容器的职责。</li>
+<li><input disabled="" type="checkbox"> 能找到 <code>CreateInstance&lt;Scenario&gt;</code>。</li>
+<li><input disabled="" type="checkbox"> 能解释 <code>IsTransferable</code>。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="13-下一课衔接">13. 下一课衔接</h2>
+<p>下一课专门剖析 LaneFollowScenario，看默认场景为什么不只是一个名字，而是有明确的切入条件和 Stage 流水线。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-09.html"><small>上一课</small><strong>09 · vector 与智能指针</strong></a><a class="page-link next" href="lesson-11.html"><small>下一课</small><strong>11 · LaneFollow 场景</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

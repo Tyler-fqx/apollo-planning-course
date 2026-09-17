@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="区分 T*、T&amp; 和 const T&amp;，理解 Planning 为什么大量使用只读引用传递输入。">
+    <title>C++ 引用与 const | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-06">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06" aria-current="page"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 06 - C++ Survival</p>
+          <h1>C++ 引用与 const</h1>
+          <p class="lesson-summary">区分 T*、T& 和 const T&，理解 Planning 为什么大量使用只读引用传递输入。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>90 - 120 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 05 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。本课解释 Planning 中大量出现的 <code>const T&amp;</code>，并区分指针和引用。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：90～120 分钟。</li>
+<li>难度：基础。</li>
+<li>前置：第 05 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 解释引用是什么。</li>
+<li><input disabled="" type="checkbox"> 区分 <code>T*</code>、<code>T&amp;</code>、<code>const T&amp;</code>。</li>
+<li><input disabled="" type="checkbox"> 阅读 <code>const std::string&amp;</code> 参数。</li>
+<li><input disabled="" type="checkbox"> 阅读 <code>Scenario::IsTransferable(..., const Frame&amp; frame)</code>。</li>
+<li><input disabled="" type="checkbox"> 理解 <code>const</code> 为什么能保护输入不被修改。</li>
+</ul>
+<h2 id="3-引用是什么">3. 引用是什么</h2>
+<p>引用是对象的别名。</p>
+<pre><code class="language-cpp">// 教学代码：引用
+int speed = 5;       // 原始变量
+int&amp; speed_ref = speed;  // speed_ref 是 speed 的另一个名字
+
+speed_ref = 8;       // 修改引用，也就是修改 speed
+</code></pre>
+<p>结果：</p>
+<pre><code class="language-text">speed == 8
+</code></pre>
+<p>引用必须先绑定到一个已有对象，不能像空指针一样悬空。</p>
+<h2 id="4-指针和引用对比">4. 指针和引用对比</h2>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+<th>是否可以为空</th>
+<th>是否可重新指向</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>T*</code></td>
+<td>指向对象的指针</td>
+<td>可以 <code>nullptr</code></td>
+<td>可以</td>
+</tr>
+<tr>
+<td><code>T&amp;</code></td>
+<td>对象的引用别名</td>
+<td>正常使用下不可为空</td>
+<td>不可以</td>
+</tr>
+<tr>
+<td><code>const T&amp;</code></td>
+<td>只读引用</td>
+<td>正常使用下不可为空</td>
+<td>不可以</td>
+</tr>
+</tbody></table>
+<p>Apollo 常用规则：</p>
+<pre><code class="language-text">需要直接修改对象 -&gt; 使用 T* 或 T&amp;
+只读访问大对象   -&gt; 使用 const T&amp;
+允许为空         -&gt; 使用 T*
+</code></pre>
+<h2 id="5-const-std-string-amp-参数">5. <code>const std::string&amp;</code> 参数</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 45～47 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 45 行
+virtual bool Init(const std::string&amp; config_dir,
+                  const std::string&amp; name,
+                  const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector);
+</code></pre>
+<p>逐项解释：</p>
+<ul>
+<li><code>std::string</code>：字符串对象。</li>
+<li><code>const</code>：函数内部不能改这个字符串。</li>
+<li><code>&amp;</code>：使用引用，不复制字符串。</li>
+<li>综合含义：以只读方式引用一个字符串。</li>
+</ul>
+<p>为什么这样做：</p>
+<ul>
+<li>避免复制长字符串，效率更高。</li>
+<li>防止初始化函数误改名字或目录。</li>
+<li>调用者可以继续使用原对象。</li>
+</ul>
+<h2 id="6-const-frame-amp-只读上下文">6. <code>const Frame&amp;</code> 只读上下文</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/scenario.h</code>，约第 70～72 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario.h，约第 70 行
+virtual bool IsTransferable(const Scenario* other_scenario,
+                            const Frame&amp; frame) {
+  // 这里只判断是否允许切换场景
+  // const Frame&amp; 表示不能通过 frame 修改 Frame
+  return false;
+}
+</code></pre>
+<p>理解：</p>
+<pre><code class="language-text">IsTransferable 负责阅读 Frame 并作出判断
+它不应该修改 Frame
+</code></pre>
+<h2 id="7-什么时候使用指针">7. 什么时候使用指针</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 49～50 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 49 行
+virtual common::Status Execute(Frame* frame,
+                               ReferenceLineInfo* reference_line_info);
+</code></pre>
+<p>Task 需要读写 Frame 和 ReferenceLineInfo，因此使用可以修改目标对象的指针。</p>
+<p>一句话区分：</p>
+<pre><code class="language-text">const Frame&amp; -&gt; 只读输入
+Frame*       -&gt; 可读写、可以为空、需要共享修改结果
+</code></pre>
+<h2 id="8-动手实验">8. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;const std::string&amp;|const Frame&amp;|const Scenario\*&quot; modules\planning\planning_interface_base -g &#39;*.h&#39;
+rg -n &quot;Frame\*|ReferenceLineInfo\*&quot; modules\planning\planning_interface_base\task_base\task.h
+</code></pre>
+<p>填写表格：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>只读还是可修改</th>
+<th>是否可能为空</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>const Frame&amp; frame</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>Frame* frame</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>const std::string&amp; name</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="9-自测题">9. 自测题</h2>
+<ol>
+<li>引用是什么？</li>
+<li>引用和指针最重要的区别是什么？</li>
+<li><code>const</code> 的作用是什么？</li>
+<li><code>const std::string&amp;</code> 为什么适合作为只读参数？</li>
+<li><code>const Frame&amp;</code> 能否修改 Frame？</li>
+<li>Task 为什么使用 <code>Frame*</code>？</li>
+<li><code>T&amp;</code> 是否可以重新绑定到另一个对象？</li>
+<li>为什么只读引用能减少复制？</li>
+<li><code>const Scenario* other_scenario</code> 中，const 限制的是什么？</li>
+<li>看到 <code>const T&amp;</code> 时应该怎样理解？</li>
+</ol>
+<h2 id="10-参考答案">10. 参考答案</h2>
+<ol>
+<li>对象或变量的别名。</li>
+<li>引用必须绑定对象且不能重新绑定；指针可空、可改指向。</li>
+<li>限制通过该接口修改对象。</li>
+<li>不复制字符串，同时防止误修改。</li>
+<li>不能。</li>
+<li>因为 Task 需要读写 Frame，并且多个任务共享同一个 Frame。</li>
+<li>不可以。</li>
+<li>引用直接访问原对象，不需要构造副本。</li>
+<li>不能通过这个指针修改它指向的 Scenario 对象。</li>
+<li>以只读方式引用对象，不复制且不修改。</li>
+</ol>
+<h2 id="11-过关检查">11. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能区分 <code>T*</code>、<code>T&amp;</code>、<code>const T&amp;</code>。</li>
+<li><input disabled="" type="checkbox"> 能解释 <code>const std::string&amp;</code>。</li>
+<li><input disabled="" type="checkbox"> 能找到 <code>const Frame&amp;</code> 实例。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="12-下一课衔接">12. 下一课衔接</h2>
+<p>下一课用 <code>Vec2d</code> 学习类、对象、构造函数和成员函数，建立阅读 Task 类的基础。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-05.html"><small>上一课</small><strong>05 · C++ 指针基础</strong></a><a class="page-link next" href="lesson-07.html"><small>下一课</small><strong>07 · 类、对象与构造函数</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

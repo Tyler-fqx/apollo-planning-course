@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="理解 Task -&gt; PathGeneration -&gt; LaneFollowPath 的继承链和插件多态。">
+    <title>继承、虚函数与 override | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-08">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08" aria-current="page"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 08 - C++ Survival</p>
+          <h1>继承、虚函数与 override</h1>
+          <p class="lesson-summary">理解 Task -> PathGeneration -> LaneFollowPath 的继承链和插件多态。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>110 - 150 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 07 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。理解 Task、Scenario、Stage 为什么都采用“基类接口 + 具体插件”的设计。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：110～150 分钟。</li>
+<li>难度：基础。</li>
+<li>前置：第 07 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 解释继承是什么。</li>
+<li><input disabled="" type="checkbox"> 读懂 <code>class A : public B</code>。</li>
+<li><input disabled="" type="checkbox"> 区分普通函数、虚函数和纯虚函数。</li>
+<li><input disabled="" type="checkbox"> 说明 <code>override</code> 的作用。</li>
+<li><input disabled="" type="checkbox"> 找到 Task 和 LaneFollowPath 的继承链。</li>
+</ul>
+<h2 id="3-继承的直觉">3. 继承的直觉</h2>
+<pre><code class="language-cpp">// 教学代码
+class Animal {
+ public:
+  virtual void Speak() = 0;  // 基类只规定“会说话”，不规定怎么说
+};
+
+class Dog : public Animal {
+ public:
+  void Speak() override { /* 狗叫 */ }
+};
+</code></pre>
+<p>含义：</p>
+<ul>
+<li><code>Dog</code> 继承 <code>Animal</code>。</li>
+<li><code>Dog</code> 必须实现 <code>Speak</code>。</li>
+<li>代码可以通过 <code>Animal*</code> 统一调用不同具体对象。</li>
+</ul>
+<h2 id="4-task-的真实继承链">4. Task 的真实继承链</h2>
+<blockquote>
+<p>源码位置：</p>
+<ul>
+<li><code>modules/planning/planning_interface_base/task_base/common/path_generation.h</code>，约第 31 行。</li>
+<li><code>modules/planning/tasks/lane_follow_path/lane_follow_path.h</code>，约第 30 行。</li>
+</ul>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：path_generation.h，约第 31 行
+class PathGeneration : public Task {
+ public:
+  // 重写 Task 的 Execute 接口
+  apollo::common::Status Execute(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+
+ protected:
+  // 具体路径任务实现 Process，供基类 Execute 调用
+  virtual apollo::common::Status Process(
+      Frame* frame, ReferenceLineInfo* reference_line_info) {
+    return apollo::common::Status::OK();
+  }
+};
+
+// 源码位置：lane_follow_path.h，约第 30 行
+class LaneFollowPath : public PathGeneration {
+ public:
+  bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override;
+
+ private:
+  common::Status Process(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+
+  LaneFollowPathConfig config_;
+};
+</code></pre>
+<p>继承链：</p>
+<pre><code class="language-text">Task
+  -&gt; PathGeneration
+      -&gt; LaneFollowPath
+</code></pre>
+<h2 id="5-为什么要有虚函数">5. 为什么要有虚函数</h2>
+<p>如果没有虚函数，调用 <code>task-&gt;Execute(...)</code> 时只能执行 Task 自身的代码。</p>
+<p>有虚函数后：</p>
+<pre><code class="language-text">task 的静态类型可以是 Task*
+实际对象可以是 LaneFollowPath
+运行时执行 LaneFollowPath 的实现
+</code></pre>
+<p>这叫多态。</p>
+<p>简化示意：</p>
+<pre><code class="language-cpp">// 教学代码
+Task* task = new LaneFollowPath();
+task-&gt;Execute(frame, reference_line_info);  // 实际进入 LaneFollowPath 的流程
+</code></pre>
+<p>Apollo 不要求你手写 <code>new</code>，插件管理器会创建对象。</p>
+<h2 id="6-override-的作用">6. <code>override</code> 的作用</h2>
+<pre><code class="language-cpp">bool Init(...) override;
+common::Status Process(...) override;
+</code></pre>
+<p><code>override</code> 告诉编译器：</p>
+<pre><code class="language-text">我准备重写父类中的虚函数
+如果签名不匹配，请直接报错
+</code></pre>
+<p>它的价值：</p>
+<ul>
+<li>防止拼写错误。</li>
+<li>防止参数类型写错却没有真正覆盖。</li>
+<li>让继承关系更容易在源码中看出来。</li>
+</ul>
+<h2 id="7-scenario-stage-task-都是同类思路">7. Scenario、Stage、Task 都是同类思路</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/scenario.h</code>，约第 64～76 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario.h，约第 64 行
+class Scenario {
+ public:
+  // 每个具体场景返回自己的上下文
+  virtual ScenarioContext* GetContext() = 0;
+
+  // 每个具体场景决定是否可切入
+  virtual bool IsTransferable(const Scenario* other_scenario,
+                              const Frame&amp; frame) {
+    return false;
+  }
+
+  // 运行当前场景
+  virtual ScenarioResult Process(
+      const common::TrajectoryPoint&amp; planning_init_point, Frame* frame);
+};
+</code></pre>
+<p>设计规律：</p>
+<ul>
+<li>基类定义统一接口。</li>
+<li>具体类实现差异逻辑。</li>
+<li>上层代码通过基类指针调用。</li>
+<li>插件配置负责选择具体类。</li>
+</ul>
+<h2 id="8-插件注册">8. 插件注册</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.h</code>，第 55 行附近。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_path.h，第 55 行附近
+// 告诉 Cyber：LaneFollowPath 是一个 Task 插件
+CYBER_PLUGIN_MANAGER_REGISTER_PLUGIN(apollo::planning::LaneFollowPath, Task)
+</code></pre>
+<p>没有注册，配置里即使写了 <code>type: &quot;LaneFollowPath&quot;</code>，运行时也可能找不到实现。</p>
+<h2 id="9-动手实验">9. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class Task|virtual common::Status Execute|virtual bool Init&quot; modules\planning\planning_interface_base\task_base\task.h
+rg -n &quot;class PathGeneration|class Decider&quot; modules\planning\planning_interface_base\task_base\common
+rg -n &quot;class LaneFollowPath|CYBER_PLUGIN_MANAGER_REGISTER_PLUGIN&quot; modules\planning\tasks\lane_follow_path\lane_follow_path.h
+</code></pre>
+<p>完成继承图：</p>
+<pre><code class="language-text">Task
+  -&gt; ________
+      -&gt; ________
+</code></pre>
+<h2 id="10-常见错误">10. 常见错误</h2>
+<ul>
+<li>把继承理解成复制代码。</li>
+<li>看到 <code>override</code> 就以为函数一定会被直接调用，忽略虚函数分发。</li>
+<li>忘记插件注册。</li>
+<li>只修改具体类，没有满足基类接口要求。</li>
+<li>把 <code>public</code> 继承和成员访问权限混淆。</li>
+</ul>
+<h2 id="11-自测题">11. 自测题</h2>
+<ol>
+<li>继承解决什么问题？</li>
+<li>纯虚函数有什么特点？</li>
+<li><code>virtual</code> 的作用是什么？</li>
+<li><code>override</code> 的作用是什么？</li>
+<li><code>LaneFollowPath</code> 的直接父类是什么？</li>
+<li><code>PathGeneration</code> 的直接父类是什么？</li>
+<li>为什么可以通过 <code>Task*</code> 调用具体 Task？</li>
+<li>插件注册宏的作用是什么？</li>
+<li>基类接口和具体实现的职责有什么不同？</li>
+<li>多态为什么适合 Scenario、Stage、Task 这类插件系统？</li>
+</ol>
+<h2 id="12-参考答案">12. 参考答案</h2>
+<ol>
+<li>复用共同接口，并允许通过基类统一处理不同派生类。</li>
+<li>基类不提供实现，要求派生类实现。</li>
+<li>允许运行时根据实际对象类型调用对应实现。</li>
+<li>明确声明重写父类虚函数，并让编译器检查签名。</li>
+<li><code>PathGeneration</code>。</li>
+<li><code>Task</code>。</li>
+<li>因为 Task 声明了虚函数，派生类可以重写，运行时发生动态分发。</li>
+<li>告诉插件管理器该类型是可创建并可按基类加载的插件。</li>
+<li>基类规定统一能力，具体类实现差异化业务。</li>
+<li>它允许上层框架不依赖具体类，只根据配置加载和运行对应插件。</li>
+</ol>
+<h2 id="13-过关检查">13. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能画出 Task-&gt;PathGeneration-&gt;LaneFollowPath。</li>
+<li><input disabled="" type="checkbox"> 能解释 virtual 和 override。</li>
+<li><input disabled="" type="checkbox"> 能找到插件注册宏。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="14-下一课衔接">14. 下一课衔接</h2>
+<p>下一课学习 <code>vector</code> 和智能指针，解释 Stage 为什么能用 <code>task_list_</code> 保存多个任务，以及 Planning 如何安全管理对象生命周期。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-07.html"><small>上一课</small><strong>07 · 类、对象与构造函数</strong></a><a class="page-link next" href="lesson-09.html"><small>下一课</small><strong>09 · vector 与智能指针</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

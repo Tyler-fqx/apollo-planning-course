@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="只学习读懂 Task::Init 和 Task::Execute 所需的变量、类型、函数、条件和返回值。">
+    <title>C++ 变量、函数与条件 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-04">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04" aria-current="page"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 04 - C++ Survival</p>
+          <h1>C++ 变量、函数与条件</h1>
+          <p class="lesson-summary">只学习读懂 Task::Init 和 Task::Execute 所需的变量、类型、函数、条件和返回值。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>80 - 110 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 03 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。只学习读懂 Task 和 Stage 所需的最基础语法。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：80～110 分钟。</li>
+<li>难度：入门。</li>
+<li>前置：第 03 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 看懂变量、类型、函数参数和返回值。</li>
+<li><input disabled="" type="checkbox"> 看懂 <code>bool</code>、<code>int</code>、<code>double</code>、<code>std::string</code>。</li>
+<li><input disabled="" type="checkbox"> 看懂 <code>if</code>、<code>return</code> 和基本逻辑判断。</li>
+<li><input disabled="" type="checkbox"> 阅读 <code>Task::Init</code> 的初始化代码。</li>
+<li><input disabled="" type="checkbox"> 理解为什么函数会把一部分值返回、一部分值保存到对象里。</li>
+</ul>
+<h2 id="3-从-task-开始理解函数">3. 从 Task 开始理解函数</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 37～56 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 37 行
+class Task {
+ public:
+  // 返回 bool：成功返回 true，失败返回 false
+  virtual bool Init(const std::string&amp; config_dir,
+                    const std::string&amp; name,
+                    const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector);
+
+  // 返回 Status：包含成功或失败状态，以及失败原因
+  virtual common::Status Execute(Frame* frame,
+                                 ReferenceLineInfo* reference_line_info);
+};
+</code></pre>
+<p>函数可以拆成四部分：</p>
+<pre><code class="language-text">返回值类型 函数名(参数列表)
+bool       Init   (config_dir, name, injector)
+</code></pre>
+<h2 id="4-常见变量类型">4. 常见变量类型</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>含义</th>
+<th>Apollo 例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>bool</code></td>
+<td>真或假</td>
+<td><code>Init</code> 是否成功</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>整数</td>
+<td>循环计数、索引</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>小数</td>
+<td>速度、距离、角度</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>单精度小数</td>
+<td>某些配置或算法参数</td>
+</tr>
+<tr>
+<td><code>std::string</code></td>
+<td>字符串</td>
+<td>Task 名称、配置路径</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>让编译器推断类型</td>
+<td>遍历容器时的局部变量</td>
+</tr>
+</tbody></table>
+<p>示例：</p>
+<pre><code class="language-cpp">// 教学代码：不同类型的变量
+bool initialized = false;       // 表示任务是否初始化完成
+int count = 0;                  // 表示已经执行的任务数量
+double speed_limit = 5.0;       // 表示限速，单位 m/s
+std::string task_name = &quot;LANE_FOLLOW_PATH&quot;;  // 任务名称
+</code></pre>
+<h2 id="5-从源码看变量初始化">5. 从源码看变量初始化</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.cc</code>，约第 40～57 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.cc，约第 40 行
+bool Task::Init(const std::string&amp; config_dir, const std::string&amp; name,
+                const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) {
+  // 保存依赖注入器，后续 Task 可以从它获取车辆状态、历史信息等对象
+  injector_ = injector;
+
+  // 保存任务名称
+  name_ = name;
+
+  // 拼接该 Task 的配置文件路径
+  config_path_ =
+      config_dir + &quot;/&quot; + ConfigUtil::TransformToPathName(name) + &quot;.pb.txt&quot;;
+
+  // status 用于接收 C++ ABI 解码函数的执行状态
+  int status;
+
+  // typeid(*this).name() 能拿到当前具体类的运行时名称
+  std::string class_name =
+      abi::__cxa_demangle(typeid(*this).name(), 0, 0, &amp;status);
+
+  // 通过插件管理器找到该类默认的配置文件路径
+  default_config_path_ =
+      apollo::cyber::plugin_manager::PluginManager::Instance()
+          -&gt;GetPluginConfPath&lt;Task&gt;(class_name, &quot;conf/default_conf.pb.txt&quot;);
+
+  // 初始化成功
+  return true;
+}
+</code></pre>
+<p>初学者暂时只关注：</p>
+<ul>
+<li><code>=</code> 是赋值。</li>
+<li><code>+</code> 可以拼接字符串。</li>
+<li><code>&amp;status</code> 表示把变量地址传给函数，后续第 05 课会详细讲。</li>
+<li><code>return true</code> 表示函数返回成功。</li>
+</ul>
+<h2 id="6-条件判断">6. 条件判断</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.cc</code>，约第 60～68 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.cc，约第 60 行
+Status Task::Execute(Frame* frame, ReferenceLineInfo* reference_line_info) {
+  // 保存输入对象地址，方便后续成员函数使用
+  frame_ = frame;
+  reference_line_info_ = reference_line_info;
+
+  // 返回 OK 状态，表示基础 Execute 没有错误
+  return Status::OK();
+}
+
+// 另一个重载版本：只接收 Frame
+Status Task::Execute(Frame* frame) {
+  frame_ = frame;
+  return Status::OK();
+}
+</code></pre>
+<p>条件判断示例：</p>
+<pre><code class="language-cpp">// 教学代码：判断任务是否收到有效输入
+if (frame == nullptr) {
+  return common::Status(common::ErrorCode::PLANNING_ERROR, &quot;frame is null&quot;);
+}
+
+if (!ret.ok()) {
+  return ret;
+}
+</code></pre>
+<p>解释：</p>
+<ul>
+<li><code>== nullptr</code> 判断指针是否为空。</li>
+<li><code>!ret.ok()</code> 表示“如果状态不是成功”。</li>
+<li><code>return</code> 立即结束当前函数并返回结果。</li>
+</ul>
+<h2 id="7-动手实验">7. 动手实验</h2>
+<p>在源码中搜索：</p>
+<pre><code class="language-powershell">rg -n &quot;bool Task::Init|Status Task::Execute|return true|Status::OK&quot; modules\planning\planning_interface_base\task_base\task.cc
+</code></pre>
+<p>完成下列填空：</p>
+<pre><code class="language-text">Task::Init 的返回类型是：________
+Task::Execute 的参数之一是：________
+task_name 在源码中对应的成员变量是：________
+初始化成功时返回：________
+</code></pre>
+<p>小练习：</p>
+<pre><code class="language-cpp">// 请补全注释
+double max_speed = 8.0;
+if (max_speed &gt; 5.0) {
+  // 这里说明什么？
+}
+</code></pre>
+<h2 id="8-自测题">8. 自测题</h2>
+<ol>
+<li><code>bool</code> 类型可以表示什么？</li>
+<li><code>double</code> 适合保存什么数据？</li>
+<li>函数最前面的 <code>bool</code> 表示什么？</li>
+<li><code>return true</code> 表示什么？</li>
+<li><code>if (!ret.ok())</code> 中 <code>!</code> 的含义是什么？</li>
+<li><code>Task::Init</code> 为什么需要保存 <code>name_</code>？</li>
+<li><code>config_path_</code> 用来做什么？</li>
+<li><code>auto</code> 的作用是什么？</li>
+<li>函数参数中的 <code>&amp;</code> 暂时可以理解成什么？</li>
+<li><code>Task::Execute</code> 返回 <code>Status</code> 比只返回 <code>bool</code> 有什么好处？</li>
+</ol>
+<h2 id="9-参考答案">9. 参考答案</h2>
+<ol>
+<li>真或假。</li>
+<li>速度、距离、角度等需要小数精度的数据。</li>
+<li>该函数的返回类型是布尔值。</li>
+<li>函数返回成功。</li>
+<li>逻辑取反，表示“状态不是成功”。</li>
+<li>用于生成配置路径和标识当前 Task。</li>
+<li>指向当前 Task 的配置文件。</li>
+<li>让编译器根据右侧表达式推断变量类型。</li>
+<li>表示引用或传地址，后面会正式学习。</li>
+<li>Status 可以同时携带成功/失败状态和失败原因。</li>
+</ol>
+<h2 id="10-过关检查">10. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能识别函数返回类型。</li>
+<li><input disabled="" type="checkbox"> 能读懂简单 if 和 return。</li>
+<li><input disabled="" type="checkbox"> 能解释 config_path_ 的作用。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="11-下一课衔接">11. 下一课衔接</h2>
+<p>下一课专门讲指针。会用 <code>Frame*</code>、<code>&amp;frame</code> 和 <code>frame-&gt;</code> 这三个写法，建立最关键的地址概念。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-03.html"><small>上一课</small><strong>03 · Scenario、Stage 和 Task</strong></a><a class="page-link next" href="lesson-05.html"><small>下一课</small><strong>05 · C++ 指针基础</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

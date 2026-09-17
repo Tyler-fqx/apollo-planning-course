@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="使用 AINFO/ADEBUG/AERROR、Cyber channel 和 DreamView 按顺序定位问题。">
+    <title>日志与 DreamView 调试 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-19">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19" aria-current="page"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 19 - Debugging</p>
+          <h1>日志与 DreamView 调试</h1>
+          <p class="lesson-summary">使用 AINFO/ADEBUG/AERROR、Cyber channel 和 DreamView 按顺序定位问题。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>实践</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 140 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 18 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。调试的本质是用证据定位问题，而不是反复猜。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～140 分钟。</li>
+<li>难度：实践。</li>
+<li>前置：第 18 课。</li>
+<li>环境：Linux + Docker + AEM + DreamView。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 区分 <code>AINFO</code>、<code>ADEBUG</code>、<code>AWARN</code>、<code>AERROR</code>。</li>
+<li><input disabled="" type="checkbox"> 在 Stage 和 Task 周围添加日志。</li>
+<li><input disabled="" type="checkbox"> 观察 Planning 输入输出 channel。</li>
+<li><input disabled="" type="checkbox"> 使用 DreamView 查看模块状态和轨迹。</li>
+<li><input disabled="" type="checkbox"> 按“输入 → 场景 → 任务 → 输出”顺序排查问题。</li>
+</ul>
+<h2 id="3-日志类型">3. 日志类型</h2>
+<table>
+<thead>
+<tr>
+<th>日志</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ADEBUG</code></td>
+<td>详细调试信息，常见于每次 Task 执行</td>
+</tr>
+<tr>
+<td><code>AINFO</code></td>
+<td>正常运行信息、关键状态</td>
+</tr>
+<tr>
+<td><code>AWARN</code></td>
+<td>可能有问题，但程序还能继续</td>
+</tr>
+<tr>
+<td><code>AERROR</code></td>
+<td>明确错误，通常需要处理</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/lane_follow_stage.cc</code>，约第 148～161 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_stage.cc，约第 148 行
+const double start_timestamp = Clock::NowInSeconds();
+
+// 执行当前任务
+ret.SetTaskStatus(task-&gt;Execute(frame, reference_line_info));
+
+// 记录任务结束时间
+const double end_timestamp = Clock::NowInSeconds();
+
+// 计算任务耗时，单位毫秒
+const double time_diff_ms = (end_timestamp - start_timestamp) * 1000;
+
+// ADEBUG：输出任务名称和耗时
+ADEBUG &lt;&lt; task-&gt;Name() &lt;&lt; &quot; time spend: &quot; &lt;&lt; time_diff_ms &lt;&lt; &quot; ms.&quot;;
+
+// AINFO：用于规划性能统计
+AINFO &lt;&lt; &quot;Planning Perf: task name [&quot; &lt;&lt; task-&gt;Name() &lt;&lt; &quot;], &quot;
+      &lt;&lt; time_diff_ms &lt;&lt; &quot; ms.&quot;;
+</code></pre>
+<h2 id="4-错误日志">4. 错误日志</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 135～139 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.cc，约第 135 行
+if (!ret.ok()) {
+  // 保存失败状态
+  stage_result.SetTaskStatus(ret);
+
+  // 输出哪个 Task 失败，以及失败原因
+  AERROR &lt;&lt; &quot;Failed to run tasks[&quot; &lt;&lt; task-&gt;Name()
+         &lt;&lt; &quot;], Error message: &quot; &lt;&lt; ret.error_message();
+  break;
+}
+</code></pre>
+<p>推荐日志格式：</p>
+<pre><code class="language-cpp">AINFO &lt;&lt; &quot;[MyTask] frame=&quot; &lt;&lt; frame-&gt;SequenceNum()
+      &lt;&lt; &quot; speed=&quot; &lt;&lt; injector_-&gt;vehicle_state()-&gt;linear_velocity()
+      &lt;&lt; &quot; action=before-check&quot;;
+</code></pre>
+<p>好的日志应该包含任务名、帧号或时间戳、关键输入值、判断结果和使用配置。</p>
+<h2 id="5-dreamview-的作用">5. DreamView 的作用</h2>
+<p>启动：</p>
+<pre><code class="language-bash">aem bootstrap start --plus
+</code></pre>
+<p>访问：</p>
+<pre><code class="language-text">http://localhost:8888/
+</code></pre>
+<p>DreamView 用来观察模块是否启动、Planning 是否有输入和输出、车辆位置和参考线、规划轨迹是否更新，以及仿真场景是否正确加载。</p>
+<p>DreamView 不是日志替代品。轨迹异常时仍要回到源码和日志。</p>
+<h2 id="6-调试顺序">6. 调试顺序</h2>
+<p>固定按下面顺序排查：</p>
+<pre><code class="language-text">1. 输入有没有到
+2. 时间戳是否新鲜
+3. Frame 是否创建成功
+4. 场景是否选对
+5. Stage 是否进入
+6. Task 是否执行
+7. 哪个 Task 返回失败
+8. 轨迹是否发布
+</code></pre>
+<p>不要一开始就在最深层的优化器里加十条日志。先确认上游是否正常。</p>
+<h2 id="7-检查输入和输出-channel">7. 检查输入和输出 channel</h2>
+<p>如果当前 Apollo Cyber 工具集可用，可以使用内置监控工具查看 channel，例如：</p>
+<pre><code class="language-bash">cyber_monitor
+</code></pre>
+<p>重点观察：</p>
+<pre><code class="language-text">/apollo/localization/pose
+/apollo/canbus/chassis
+/apollo/prediction
+/apollo/planning
+</code></pre>
+<p>如果命令或工具名因版本不同而变化，使用当前版本帮助信息确认，不盲目复制旧教程命令。</p>
+<h2 id="8-查看日志">8. 查看日志</h2>
+<p>日志通常位于 Apollo 数据目录。不同版本的目录可能不同，先确认当前环境。</p>
+<p>示例：</p>
+<pre><code class="language-bash">rg &quot;Planning Perf|Failed to run tasks|LoggingProbe&quot; /opt/apollo/neo/data/log
+</code></pre>
+<p>只看最近内容：</p>
+<pre><code class="language-bash">tail -f /opt/apollo/neo/data/log/planning.log
+</code></pre>
+<p>如果路径不存在：</p>
+<pre><code class="language-bash">find /opt/apollo/neo/data/log -maxdepth 2 -type f | head
+</code></pre>
+<p>先找到真实日志文件，再执行 <code>tail</code>。</p>
+<h2 id="9-动手实验">9. 动手实验</h2>
+<h3 id="实验-a-观察任务耗时">实验 A：观察任务耗时</h3>
+<pre><code class="language-bash">rg &quot;Planning Perf&quot; /opt/apollo/neo/data/log
+</code></pre>
+<p>记录：</p>
+<table>
+<thead>
+<tr>
+<th>Task 名称</th>
+<th>耗时</th>
+<th>是否异常</th>
+</tr>
+</thead>
+<tbody><tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="实验-b-在日志-task-中输出帧号">实验 B：在日志 Task 中输出帧号</h3>
+<pre><code class="language-cpp">// 教学改动：放在 LoggingProbe::Process 中
+AINFO &lt;&lt; &quot;[LoggingProbe] frame=&quot; &lt;&lt; frame-&gt;SequenceNum()
+      &lt;&lt; &quot; planning_start=&quot; &lt;&lt; frame-&gt;PlanningStartPoint().DebugString();
+</code></pre>
+<h3 id="实验-c-观察-dreamview">实验 C：观察 DreamView</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Planning 模块显示正常。</li>
+<li><input disabled="" type="checkbox"> 车辆在场景中移动。</li>
+<li><input disabled="" type="checkbox"> 规划轨迹持续更新。</li>
+<li><input disabled="" type="checkbox"> 修改日志 Task 后日志有对应输出。</li>
+</ul>
+<h2 id="10-常见错误">10. 常见错误</h2>
+<ul>
+<li>只看最终报错，不看第一条错误。</li>
+<li>日志级别设得太低，看不到 ADEBUG。</li>
+<li>代码改了但没有重新编译。</li>
+<li>查的是旧日志。</li>
+<li>只看 DreamView 界面，不检查输入时间戳。</li>
+<li>在不同版本中使用错误的日志目录。</li>
+</ul>
+<h2 id="11-自测题">11. 自测题</h2>
+<ol>
+<li>四种日志级别分别适合什么信息？</li>
+<li>任务耗时通常使用哪个时钟接口？</li>
+<li>某 Task 失败时，Stage 会记录什么？</li>
+<li>好的调试日志至少包含哪些信息？</li>
+<li>DreamView 可以观察什么？</li>
+<li>调试时为什么先检查输入？</li>
+<li><code>/apollo/planning</code> 是什么输出？</li>
+<li>推荐按什么顺序定位失败？</li>
+<li>日志文件路径不确定时怎么做？</li>
+<li>什么证据能证明 Task 真的执行了？</li>
+</ol>
+<h2 id="12-参考答案">12. 参考答案</h2>
+<ol>
+<li>ADEBUG 详细调试，AINFO 正常关键信息，AWARN 警告，AERROR 错误。</li>
+<li><code>Clock::NowInSeconds()</code>。</li>
+<li>Task 名称和错误原因。</li>
+<li>任务名、帧号/时间、关键输入、判断结果和配置。</li>
+<li>模块状态、输入输出、车辆、参考线和轨迹。</li>
+<li>如果上游输入缺失或过期，深层算法无法正常工作。</li>
+<li>Planning 发布给控制模块的 ADCTrajectory。</li>
+<li>输入、Frame、场景、Stage、Task、轨迹发布。</li>
+<li>先 <code>find</code> 日志目录和文件，再选择真实路径。</li>
+<li>有指定关键字的日志、帧号递增，并且对应新编译版本。</li>
+</ol>
+<h2 id="13-过关检查">13. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能找到任务耗时日志。</li>
+<li><input disabled="" type="checkbox"> 能在自己的 Task 中加入有效日志。</li>
+<li><input disabled="" type="checkbox"> 能用 DreamView 观察规划轨迹。</li>
+<li><input disabled="" type="checkbox"> 能按顺序排查一个 Planning 失败。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="14-下一课衔接">14. 下一课衔接</h2>
+<p>最后一课完成一个小型限速功能：增加可配置限速上限，把它写入速度限制点，并验证修改前后行为。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-18.html"><small>上一课</small><strong>18 · 新增一个简单 Task</strong></a><a class="page-link next" href="lesson-20.html"><small>下一课</small><strong>20 · 小型限速功能实战</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

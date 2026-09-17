@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="增加可配置限速上限，修改 Proto、配置和 SpeedLimitDecider，并完成三组对照验证。">
+    <title>小型限速功能实战 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-20">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20" aria-current="page"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 20 - Capstone</p>
+          <h1>小型限速功能实战</h1>
+          <p class="lesson-summary">增加可配置限速上限，修改 Proto、配置和 SpeedLimitDecider，并完成三组对照验证。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>实践</span>
+            <span class="meta-pill"><strong>用时</strong>180 - 240 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 14～19 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版期末项目。目标不是写复杂优化器，而是完成一次可解释、可验证的小修改。</p>
+</blockquote>
+<h2 id="1-项目目标">1. 项目目标</h2>
+<p>在速度边界计算中增加一个可配置速度上限：</p>
+<pre><code class="language-text">如果配置 region_speed_cap &gt; 0
+    当前速度限制 = min(当前速度限制, region_speed_cap)
+</code></pre>
+<p>注意：下面的改动是教学方案，不是官方已有实现。必须以你的实际分支和 Proto 构建方式为准。</p>
+<h2 id="2-前置知识">2. 前置知识</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 会读 <code>SpeedBoundsDecider</code>。</li>
+<li><input disabled="" type="checkbox"> 知道速度限制在路径上的表示方式。</li>
+<li><input disabled="" type="checkbox"> 会修改配置和 Proto 字段。</li>
+<li><input disabled="" type="checkbox"> 会编译 Planning。</li>
+<li><input disabled="" type="checkbox"> 会使用日志和 DreamView 验证。</li>
+</ul>
+<h2 id="3-找到修改点">3. 找到修改点</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/speed_bounds_decider/speed_limit_decider.cc</code>，约第 45～171 行。</p>
+</blockquote>
+<p>关键位置：</p>
+<pre><code class="language-cpp">// 源码位置：speed_limit_decider.cc，约第 149～167 行
+double curr_speed_limit = 0.0;
+
+if (speed_limit_from_nearby_obstacles &lt;
+    std::numeric_limits&lt;double&gt;::max()) {
+  curr_speed_limit =
+      std::max(speed_bounds_config_.lowest_speed(),
+               std::min({speed_limit_from_reference_line,
+                         speed_limit_from_centripetal_acc,
+                         speed_limit_from_nearby_obstacles}));
+} else {
+  curr_speed_limit =
+      std::max(speed_bounds_config_.lowest_speed(),
+               std::min({speed_limit_from_reference_line,
+                         speed_limit_from_centripetal_acc}));
+}
+
+speed_limit_data-&gt;AppendSpeedLimit(path_s, curr_speed_limit);
+</code></pre>
+<p>本项目的插入位置：</p>
+<pre><code class="language-text">计算出 curr_speed_limit 之后
+AppendSpeedLimit 之前
+</code></pre>
+<h2 id="4-第一步-增加配置字段">4. 第一步：增加配置字段</h2>
+<blockquote>
+<p>教学改动位置：<code>modules/planning/tasks/speed_bounds_decider/proto/speed_bounds_decider.proto</code></p>
+</blockquote>
+<p>现有配置包含 <code>total_time</code>、<code>boundary_buffer</code>、<code>max_centric_acceleration_limit</code>、<code>lowest_speed</code> 等。</p>
+<p>教学增加：</p>
+<pre><code class="language-proto">// 教学改动：区域速度上限，单位 m/s
+// 默认值为 0，表示不启用额外限速
+optional double region_speed_cap = 13 [default = 0.0];
+</code></pre>
+<p>为什么用 13：</p>
+<pre><code class="language-text">不能和已有字段编号重复
+Proto 字段号一旦发布，不应随便改号
+</code></pre>
+<h2 id="5-第二步-修改配置">5. 第二步：修改配置</h2>
+<blockquote>
+<p>教学改动位置：<code>modules/planning/tasks/speed_bounds_decider/conf/default_conf.pb.txt</code></p>
+</blockquote>
+<pre><code class="language-text"># 教学改动：启用 m/s 的区域速度上限
+region_speed_cap: 4.5
+</code></pre>
+<p>注意单位：Apollo 内部速度大量使用 m/s，界面显示常常是 km/h。4.5 m/s 约等于 16.2 km/h。</p>
+<h2 id="6-第三步-修改速度限制逻辑">6. 第三步：修改速度限制逻辑</h2>
+<blockquote>
+<p>教学改动位置：<code>modules/planning/tasks/speed_bounds_decider/speed_limit_decider.cc</code>，在 <code>curr_speed_limit</code> 计算后。</p>
+</blockquote>
+<pre><code class="language-cpp">// 教学改动：读取配置中的区域限速，0 表示关闭
+const double region_speed_cap = speed_bounds_config_.region_speed_cap();
+
+if (region_speed_cap &gt; 0.0) {
+  // 先记录原始限制，方便调试对比
+  ADEBUG &lt;&lt; &quot;[RegionSpeedCap] s=&quot; &lt;&lt; path_s
+         &lt;&lt; &quot; before=&quot; &lt;&lt; curr_speed_limit
+         &lt;&lt; &quot; cap=&quot; &lt;&lt; region_speed_cap;
+
+  // 不得超过区域速度上限
+  curr_speed_limit = std::min(curr_speed_limit, region_speed_cap);
+
+  // 记录应用后的限制
+  ADEBUG &lt;&lt; &quot;[RegionSpeedCap] s=&quot; &lt;&lt; path_s
+         &lt;&lt; &quot; after=&quot; &lt;&lt; curr_speed_limit;
+}
+
+// 原来的追加逻辑保持不变
+speed_limit_data-&gt;AppendSpeedLimit(path_s, curr_speed_limit);
+</code></pre>
+<p>边界处理：</p>
+<ul>
+<li>如果 <code>region_speed_cap &lt;= 0</code>，保持原逻辑。</li>
+<li>如果配置值大于地图限速，<code>min</code> 会自动选择地图限速。</li>
+<li>如果配置值小于 <code>lowest_speed</code>，最终可能受最低速度影响，需要按项目要求决定优先级。</li>
+</ul>
+<h2 id="7-第四步-处理最低速度语义">7. 第四步：处理最低速度语义</h2>
+<p>当前实现先用 <code>std::max(lowest_speed, ...)</code>，然后应用上限。</p>
+<p>可能出现：</p>
+<pre><code class="language-text">lowest_speed = 0.5
+region_speed_cap = 0.3
+curr_speed_limit 先变成 &gt;= 0.5
+之后 min 后变成 0.3
+</code></pre>
+<p>因此需要明确：区域限速是否可以低于 <code>lowest_speed</code>。教学项目建议确保限速结果不低于最低速度：</p>
+<pre><code class="language-cpp">// 教学保护：最终结果不得低于配置的最低速度
+curr_speed_limit =
+    std::max(speed_bounds_config_.lowest_speed(), curr_speed_limit);
+</code></pre>
+<h2 id="8-第五步-编译">8. 第五步：编译</h2>
+<pre><code class="language-bash"># 检查工作空间
+cat .workspace.json
+
+# 编译 Planning
+buildtool build -p modules/planning
+</code></pre>
+<p>如果 Proto 修改后没有生成新头文件：</p>
+<ol>
+<li>确认 Proto BUILD 正确。</li>
+<li>清理对应构建缓存。</li>
+<li>重新执行 buildtool。</li>
+<li>检查生成文件路径。</li>
+</ol>
+<h2 id="9-第六步-运行和验证">9. 第六步：运行和验证</h2>
+<pre><code class="language-bash">aem bootstrap start --plus
+</code></pre>
+<p>打开 <code>http://localhost:8888/</code>。</p>
+<p>验证：</p>
+<ul>
+<li><input disabled="" type="checkbox"> Planning 能正常启动。</li>
+<li><input disabled="" type="checkbox"> 没有 Proto 或配置加载错误。</li>
+<li><input disabled="" type="checkbox"> 仿真车辆能移动。</li>
+<li><input disabled="" type="checkbox"> 日志中出现 <code>[RegionSpeedCap]</code>。</li>
+<li><input disabled="" type="checkbox"> 轨迹仍然连续。</li>
+<li><input disabled="" type="checkbox"> 关闭限速后行为恢复。</li>
+</ul>
+<p>查看日志：</p>
+<pre><code class="language-bash">rg &quot;RegionSpeedCap|GetSpeedLimits failed|PLANNING_ERROR&quot; /opt/apollo/neo/data/log
+</code></pre>
+<h2 id="10-对比实验">10. 对比实验</h2>
+<p>至少做三组：</p>
+<table>
+<thead>
+<tr>
+<th>组别</th>
+<th><code>region_speed_cap</code></th>
+<th>预期</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>0.0</td>
+<td>原行为，不启用额外限速</td>
+</tr>
+<tr>
+<td>B</td>
+<td>4.5</td>
+<td>速度限制明显降低但不急刹</td>
+</tr>
+<tr>
+<td>C</td>
+<td>1.0</td>
+<td>更低限速，检查是否仍可平稳停车或行驶</td>
+</tr>
+</tbody></table>
+<p>记录最大轨迹速度、是否出现急刹、日志是否正常。</p>
+<h2 id="11-回退方案">11. 回退方案</h2>
+<p>比赛或课程代码必须可以撤销：</p>
+<pre><code class="language-bash">git diff
+git status
+</code></pre>
+<p>只修改以下文件：</p>
+<pre><code class="language-text">modules/planning/tasks/speed_bounds_decider/proto/speed_bounds_decider.proto
+modules/planning/tasks/speed_bounds_decider/conf/default_conf.pb.txt
+modules/planning/tasks/speed_bounds_decider/speed_limit_decider.cc
+</code></pre>
+<p>不要顺手重构其他逻辑。</p>
+<h2 id="12-常见错误">12. 常见错误</h2>
+<ul>
+<li>忘记修改 Proto 字段号。</li>
+<li>忘记重新生成 Proto。</li>
+<li>把 m/s 和 km/h 混用。</li>
+<li>限速低于车辆最低速度，导致行为不符合预期。</li>
+<li>只在日志中看到配置，却看不到速度点变化。</li>
+<li>没做关闭配置的对照实验。</li>
+<li>直接修改比赛主分支，没有保留回退点。</li>
+</ul>
+<h2 id="13-项目交付物">13. 项目交付物</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 修改文件清单。</li>
+<li><input disabled="" type="checkbox"> 配置值说明。</li>
+<li><input disabled="" type="checkbox"> 编译成功证据。</li>
+<li><input disabled="" type="checkbox"> 三组对照实验。</li>
+<li><input disabled="" type="checkbox"> DreamView 截图或轨迹数据。</li>
+<li><input disabled="" type="checkbox"> 关键日志。</li>
+<li><input disabled="" type="checkbox"> 一段说明：为什么在 <code>SpeedLimitDecider</code> 中应用上限，而不是直接修改最终控制命令。</li>
+</ul>
+<h2 id="14-自测题">14. 自测题</h2>
+<ol>
+<li>为什么要在 <code>SpeedLimitDecider</code> 层增加限速？</li>
+<li>为什么默认值应为 0？</li>
+<li>为什么不能复用已有 Proto 字段号？</li>
+<li>速度单位是什么？</li>
+<li><code>std::min</code> 在这里做什么？</li>
+<li>为什么还要考虑 <code>lowest_speed</code>？</li>
+<li>如何验证配置关闭时行为不变？</li>
+<li>编译失败时应先检查什么？</li>
+<li>本项目为什么不直接改控制模块？</li>
+<li>一个可接受的项目结果需要哪些证据？</li>
+</ol>
+<h2 id="15-参考答案">15. 参考答案</h2>
+<ol>
+<li>在速度优化之前收紧速度限制，影响会进入后续速度规划。</li>
+<li>0 可作为“未启用额外限速”的明确开关。</li>
+<li>字段号对应 Proto 二进制兼容性，重复或修改会破坏解析。</li>
+<li>内部通常使用 m/s。</li>
+<li>取原限制和区域上限中更小的值。</li>
+<li>防止限速结果低于系统允许的最低规划速度，导致不一致行为。</li>
+<li>设置 <code>region_speed_cap: 0.0</code> 并比较修改前后轨迹和日志。</li>
+<li>Proto 字段、配置、BUILD 依赖和工作空间是否切换成功。</li>
+<li>控制应在规划轨迹确定后执行，Planning 应该先给出受限轨迹。</li>
+<li>能编译、能运行、能解释、能对比，并保存日志和轨迹证据。</li>
+</ol>
+<h2 id="16-最终过关检查">16. 最终过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 我理解整个 Planning 数据流。</li>
+<li><input disabled="" type="checkbox"> 我能找到 Scenario、Stage 和 Task 的关系。</li>
+<li><input disabled="" type="checkbox"> 我能读懂指针、引用、类和继承。</li>
+<li><input disabled="" type="checkbox"> 我能说明本次修改的输入和输出。</li>
+<li><input disabled="" type="checkbox"> 我知道如何安全回退修改。</li>
+<li><input disabled="" type="checkbox"> 我有编译、日志和仿真三层证据。</li>
+</ul>
+<p>完成本课后，建议重新回顾第 02、03、10～17 课，并把整个系统用一张图讲给自己听。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-19.html"><small>上一课</small><strong>19 · 日志与 DreamView 调试</strong></a><a class="page-link next" href="index.html"><small>下一步</small><strong>回到路线图</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

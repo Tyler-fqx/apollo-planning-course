@@ -1,0 +1,272 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="掌握 Frame*、&amp;frame、*frame、frame-&gt; 和 nullptr，专门解决阅读 Task 时的指针障碍。">
+    <title>C++ 指针基础 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-05">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05" aria-current="page"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 05 - C++ Survival</p>
+          <h1>C++ 指针基础</h1>
+          <p class="lesson-summary">掌握 Frame*、&frame、*frame、frame-> 和 nullptr，专门解决阅读 Task 时的指针障碍。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 140 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 04 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。指针是阅读 Task 最容易卡住的地方，本课只讲读懂 Planning 必须掌握的三种操作。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～140 分钟。</li>
+<li>难度：基础。</li>
+<li>前置：第 04 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 解释变量和地址的关系。</li>
+<li><input disabled="" type="checkbox"> 识别 <code>Frame*</code>、<code>&amp;frame</code>、<code>*frame</code>、<code>frame-&gt;</code>。</li>
+<li><input disabled="" type="checkbox"> 理解空指针 <code>nullptr</code>。</li>
+<li><input disabled="" type="checkbox"> 阅读 <code>Task::Execute(Frame* frame, ...)</code>。</li>
+<li><input disabled="" type="checkbox"> 说明为什么 Task 需要操作原始 Frame，而不是复制一份。</li>
+</ul>
+<h2 id="3-变量与地址">3. 变量与地址</h2>
+<p>变量不仅保存值，还位于内存中的某个地址。</p>
+<pre><code class="language-text">变量名 frame
+  -&gt; 地址 0x1234
+  -&gt; 内容：一个 Frame 对象
+</code></pre>
+<p>指针保存的不是对象本身，而是对象地址。</p>
+<pre><code class="language-text">Frame* frame_ptr
+  -&gt; 保存地址 0x1234
+  -&gt; 通过这个地址可以找到 Frame 对象
+</code></pre>
+<h2 id="4-指针声明">4. 指针声明</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 49～51 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 49 行
+class Task {
+ public:
+  // Frame* 表示“指向 Frame 的指针”
+  virtual common::Status Execute(Frame* frame,
+                                 ReferenceLineInfo* reference_line_info);
+
+ protected:
+  // 保存当前 Task 正在处理的 Frame 地址
+  Frame* frame_;
+
+  // 保存当前参考线信息地址
+  ReferenceLineInfo* reference_line_info_;
+};
+</code></pre>
+<p><code>Frame* frame</code> 可以读作：</p>
+<pre><code class="language-text">frame 是一个指针，它指向一个 Frame 对象
+</code></pre>
+<h2 id="5-取地址-amp">5. 取地址 <code>&amp;</code></h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 121～124 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.cc，约第 121 行
+for (auto task : task_list_) {
+  // &amp;reference_line_info 表示把当前对象的地址传给 Execute
+  ret = task-&gt;Execute(frame, &amp;reference_line_info);
+}
+</code></pre>
+<p>解释：</p>
+<ul>
+<li><code>reference_line_info</code> 是一个对象。</li>
+<li><code>&amp;reference_line_info</code> 得到这个对象的地址。</li>
+<li><code>Task::Execute</code> 需要 <code>ReferenceLineInfo*</code>，所以传地址。</li>
+</ul>
+<h2 id="6-解引用">6. 解引用 <code>*</code></h2>
+<pre><code class="language-cpp">// 教学代码：解引用
+Frame* frame_ptr = &amp;frame;  // 取得 frame 的地址
+Frame&amp; frame_ref = *frame_ptr;  // 通过地址找回真正的 Frame 对象
+</code></pre>
+<p>区分：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&amp;frame</code></td>
+<td>取得 frame 的地址</td>
+</tr>
+<tr>
+<td><code>frame_ptr</code></td>
+<td>地址本身</td>
+</tr>
+<tr>
+<td><code>*frame_ptr</code></td>
+<td>地址指向的对象</td>
+</tr>
+<tr>
+<td><code>frame_ptr-&gt;method()</code></td>
+<td>通过地址调用对象的成员函数</td>
+</tr>
+</tbody></table>
+<h2 id="7-箭头运算符-gt">7. 箭头运算符 <code>-&gt;</code></h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 104～110 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.cc，约第 104 行
+if (frame-&gt;reference_line_info().empty()) {
+  // frame 是指针，所以用 -&gt; 访问 Frame 的成员函数
+  return stage_result.SetStageStatus(StageStatusType::ERROR);
+}
+
+for (auto&amp; reference_line_info : *frame-&gt;mutable_reference_line_info()) {
+  // *frame-&gt;mutable_reference_line_info() 取出容器本身
+  // auto&amp; 表示遍历时直接引用容器中的对象
+}
+</code></pre>
+<p>等价理解：</p>
+<pre><code class="language-cpp">frame-&gt;reference_line_info()
+</code></pre>
+<p>近似等于：</p>
+<pre><code class="language-cpp">(*frame).reference_line_info()
+</code></pre>
+<h2 id="8-空指针-nullptr">8. 空指针 <code>nullptr</code></h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/traffic_rules_base/traffic_decider.cc</code>，约第 74～81 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_decider.cc，约第 74 行
+Status TrafficDecider::Execute(Frame* frame,
+                               ReferenceLineInfo* reference_line_info) {
+  // 如果传入空指针，立即停止，避免后面访问非法地址
+  CHECK_NOTNULL(frame);
+  CHECK_NOTNULL(reference_line_info);
+
+  // 遍历所有交通规则
+  for (const auto&amp; rule : rule_list_) {
+    rule-&gt;ApplyRule(frame, reference_line_info);
+  }
+}
+</code></pre>
+<p>空指针表示：</p>
+<pre><code class="language-text">这个指针没有指向任何有效对象
+</code></pre>
+<p>对空指针使用 <code>-&gt;</code> 会导致程序崩溃，所以需要先检查。</p>
+<h2 id="9-为什么-task-不复制-frame">9. 为什么 Task 不复制 Frame</h2>
+<p>Frame 包含本轮规划的大量数据和中间结果。</p>
+<p>如果每个 Task 都复制一份 Frame：</p>
+<ul>
+<li>内存开销大。</li>
+<li>修改结果无法传回主流程。</li>
+<li>不同 Task 无法共享同一个规划上下文。</li>
+</ul>
+<p>因此使用：</p>
+<pre><code class="language-text">Frame* -&gt; 让多个 Task 操作同一个 Frame
+</code></pre>
+<h2 id="10-动手实验">10. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;Execute\(Frame\*|Execute\(Frame\* const|Frame\* frame&quot; modules\planning\planning_interface_base\task_base
+rg -n &quot;&amp;reference_line_info|frame-&gt;|reference_line_info-&gt;&quot; modules\planning\planning_interface_base\scenario_base\stage.cc
+rg -n &quot;CHECK_NOTNULL&quot; modules\planning\planning_interface_base\traffic_rules_base\traffic_decider.cc
+</code></pre>
+<p>请写出三行代码分别完成：</p>
+<pre><code class="language-cpp">// 取得 frame 的地址
+// 通过指针访问 Frame 的成员函数
+// 判断指针是否为空
+</code></pre>
+<h2 id="11-常见错误">11. 常见错误</h2>
+<ul>
+<li>把 <code>*</code> 在声明中的含义和在表达式中的含义混淆。</li>
+<li>忘记 <code>frame</code> 是指针，误写成 <code>frame.method()</code>。</li>
+<li>不检查空指针就直接使用 <code>-&gt;</code>。</li>
+<li>认为指针保存的是 Frame 的复制品。</li>
+<li>混淆 <code>&amp;frame</code> 和 <code>frame</code>。</li>
+</ul>
+<h2 id="12-自测题">12. 自测题</h2>
+<ol>
+<li>指针保存的是什么？</li>
+<li><code>Frame*</code> 的含义是什么？</li>
+<li><code>&amp;frame</code> 的含义是什么？</li>
+<li><code>*frame_ptr</code> 的含义是什么？</li>
+<li><code>frame-&gt;method()</code> 近似等价于什么？</li>
+<li><code>nullptr</code> 表示什么？</li>
+<li>为什么使用空指针会导致崩溃？</li>
+<li>Task 为什么不复制 Frame？</li>
+<li><code>frame_</code> 后面的下划线通常代表什么？</li>
+<li>看到一个参数是 <code>Frame* frame</code>，应该怎样读？</li>
+</ol>
+<h2 id="13-参考答案">13. 参考答案</h2>
+<ol>
+<li>对象在内存中的地址。</li>
+<li>一个指向 Frame 对象的指针类型。</li>
+<li>取得变量 frame 的地址。</li>
+<li>取出指针指向的实际对象。</li>
+<li><code>(*frame).method()</code>。</li>
+<li>指针没有指向任何有效对象。</li>
+<li>因为 <code>-&gt;</code> 会访问空地址，导致非法内存访问。</li>
+<li>为了让多个 Task 共享并修改同一轮规划上下文。</li>
+<li>通常是成员变量命名习惯，用来和局部变量区分。</li>
+<li>传入的是 Frame 对象地址，函数可以直接读写这个 Frame。</li>
+</ol>
+<h2 id="14-过关检查">14. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能区分 <code>frame</code>、<code>&amp;frame</code>、<code>*frame_ptr</code>、<code>frame-&gt;</code>。</li>
+<li><input disabled="" type="checkbox"> 能解释空指针风险。</li>
+<li><input disabled="" type="checkbox"> 能从 Task 基类找到 Frame 指针参数。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="15-下一课衔接">15. 下一课衔接</h2>
+<p>下一课讲引用和 <code>const</code>。你会看到 <code>const Frame&amp;</code>、<code>const std::string&amp;</code> 这些写法，并知道它们为什么比复制对象更高效。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-04.html"><small>上一课</small><strong>04 · C++ 变量、函数与条件</strong></a><a class="page-link next" href="lesson-06.html"><small>下一课</small><strong>06 · C++ 引用与 const</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="阅读路径边界、路径优化、路径评估和写入 ReferenceLineInfo 的完整流程。">
+    <title>路径 Task 示例 LaneFollowPath | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-14">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14" aria-current="page"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 14 - Task</p>
+          <h1>路径 Task 示例 LaneFollowPath</h1>
+          <p class="lesson-summary">阅读路径边界、路径优化、路径评估和写入 ReferenceLineInfo 的完整流程。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>120 - 160 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 13 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。重点理解路径任务怎样从自车、参考线和障碍物生成候选路径。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：120～160 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 13 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 说明 LaneFollowPath 的输入和输出。</li>
+<li><input disabled="" type="checkbox"> 区分 DecidePathBounds、OptimizePath、AssessPath。</li>
+<li><input disabled="" type="checkbox"> 理解为什么先有路径边界，再优化路径。</li>
+<li><input disabled="" type="checkbox"> 找到路径边界对静态障碍物的处理。</li>
+<li><input disabled="" type="checkbox"> 解释最终路径如何写入 ReferenceLineInfo。</li>
+</ul>
+<h2 id="3-类定义">3. 类定义</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.h</code>，约第 30～56 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_path.h，约第 30 行
+class LaneFollowPath : public PathGeneration {
+ public:
+  // 初始化 Task 并加载 LaneFollowPathConfig
+  bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override;
+
+ private:
+  // 路径任务的实际执行入口
+  apollo::common::Status Process(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+
+  // 第一步：决定路径可行边界
+  bool DecidePathBounds(std::vector&lt;PathBoundary&gt;* boundary);
+
+  // 第二步：根据边界优化候选路径
+  bool OptimizePath(const std::vector&lt;PathBoundary&gt;&amp; path_boundaries,
+                    std::vector&lt;PathData&gt;* candidate_path_data);
+
+  // 第三步：评估候选路径，选择最终路径
+  bool AssessPath(std::vector&lt;PathData&gt;* candidate_path_data,
+                  PathData* final_path);
+
+  // 当前路径任务配置
+  LaneFollowPathConfig config_;
+};
+</code></pre>
+<p>三个阶段可以记成：</p>
+<pre><code class="language-text">定边界 -&gt; 生成候选路径 -&gt; 评估并选路径
+</code></pre>
+<h2 id="4-process-主流程">4. Process 主流程</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.cc</code>，约第 47～74 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_path.cc，约第 47 行
+apollo::common::Status LaneFollowPath::Process(
+    Frame* frame, ReferenceLineInfo* reference_line_info) {
+  // 如果已经有路径，或者路径可以复用，就跳过本次计算
+  if (!reference_line_info-&gt;path_data().Empty() ||
+      reference_line_info-&gt;path_reusable()) {
+    return Status::OK();
+  }
+
+  // 保存所有候选路径边界
+  std::vector&lt;PathBoundary&gt; candidate_path_boundaries;
+
+  // 保存候选路径数据
+  std::vector&lt;PathData&gt; candidate_path_data;
+
+  // 把车辆起始点转换为 SL 状态
+  GetStartPointSLState();
+
+  // 第一步：决定路径边界
+  if (!DecidePathBounds(&amp;candidate_path_boundaries)) {
+    AERROR &lt;&lt; &quot;Decide path bound failed&quot;;
+    return Status::OK();
+  }
+
+  // 第二步：优化候选路径
+  if (!OptimizePath(candidate_path_boundaries, &amp;candidate_path_data)) {
+    AERROR &lt;&lt; &quot;Optimize path failed&quot;;
+    return Status::OK();
+  }
+
+  // 第三步：评估路径并写入 ReferenceLineInfo 的 path_data
+  if (!AssessPath(&amp;candidate_path_data,
+                  reference_line_info-&gt;mutable_path_data())) {
+    AERROR &lt;&lt; &quot;Path assessment failed&quot;;
+  }
+
+  return Status::OK();
+}
+</code></pre>
+<h2 id="5-路径边界">5. 路径边界</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/lane_follow_path/lane_follow_path.cc</code>，约第 76～128 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_path.cc，约第 76 行
+bool LaneFollowPath::DecidePathBounds(std::vector&lt;PathBoundary&gt;* boundary) {
+  // 先创建一个空的路径边界容器
+  boundary-&gt;emplace_back();
+  auto&amp; path_bound = boundary-&gt;back();
+
+  // 根据自车位置和参考线初始化边界
+  if (!PathBoundsDeciderUtil::InitPathBoundary(
+          *reference_line_info_, &amp;path_bound, init_sl_state_)) {
+    return false;
+  }
+
+  // 先根据当前车道生成一个基础边界
+  if (!PathBoundsDeciderUtil::GetBoundaryFromSelfLane(
+          *reference_line_info_, init_sl_state_, &amp;path_bound)) {
+    return false;
+  }
+
+  // 根据静态障碍物进一步收紧或调整边界
+  if (!PathBoundsDeciderUtil::GetBoundaryFromStaticObstacles(
+          *reference_line_info_, &amp;obs_sl_polygons_, init_sl_state_, &amp;path_bound,
+          &amp;blocking_obstacle_id, &amp;path_narrowest_width)) {
+    return false;
+  }
+
+  return true;
+}
+</code></pre>
+<p>为什么需要路径边界：</p>
+<ul>
+<li>车辆不能随意离开可行驶区域。</li>
+<li>障碍物会限制路径的横向范围。</li>
+<li>优化器在边界内求一条更平滑、可执行的路径。</li>
+<li>边界不是最终路径，只是路径必须遵守的约束。</li>
+</ul>
+<h2 id="6-路径优化">6. 路径优化</h2>
+<p>核心工作：</p>
+<pre><code class="language-text">为每一个路径边界计算参考路径和约束
+调用 PathOptimizerUtil::OptimizePath
+成功后将 PathData 加入 candidate_path_data
+</code></pre>
+<p>新概念：</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>PathBoundary</code></td>
+<td>优化路径时必须遵守的边界</td>
+</tr>
+<tr>
+<td><code>PathData</code></td>
+<td>一条候选路径及其附属信息</td>
+</tr>
+<tr>
+<td><code>SL</code></td>
+<td>沿参考线的纵向 <code>s</code> 和横向 <code>l</code></td>
+</tr>
+<tr>
+<td><code>reference line</code></td>
+<td>地图路线在规划坐标系中的参考基线</td>
+</tr>
+</tbody></table>
+<h2 id="7-路径评估">7. 路径评估</h2>
+<p>评估会检查：</p>
+<ul>
+<li>路径是否为空。</li>
+<li>是否偏离参考线太远。</li>
+<li>是否驶出道路。</li>
+<li>是否与静态障碍物碰撞。</li>
+<li>终点是否落在不合理的相邻车道。</li>
+<li>哪条候选路径代价最低、最适合当前场景。</li>
+</ul>
+<p>最终结果写入：</p>
+<pre><code class="language-cpp">reference_line_info-&gt;mutable_path_data()
+</code></pre>
+<p>这也说明路径 Task 的输出不是直接发消息，而是写回本轮共享上下文。</p>
+<h2 id="8-动手实验">8. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class LaneFollowPath|DecidePathBounds|OptimizePath|AssessPath&quot; modules\planning\tasks\lane_follow_path\lane_follow_path.h
+rg -n &quot;LaneFollowPath::Process|InitPathBoundary|GetBoundaryFromSelfLane|GetBoundaryFromStaticObstacles&quot; modules\planning\tasks\lane_follow_path\lane_follow_path.cc
+rg -n &quot;PathOptimizerUtil::OptimizePath|mutable_path_data&quot; modules\planning\tasks\lane_follow_path\lane_follow_path.cc
+</code></pre>
+<p>填写数据流：</p>
+<pre><code class="language-text">Frame + ReferenceLineInfo
+  -&gt; ________
+  -&gt; ________
+  -&gt; ________
+  -&gt; ReferenceLineInfo::path_data
+</code></pre>
+<h2 id="9-常见错误">9. 常见错误</h2>
+<ul>
+<li>把路径边界当成最终路径。</li>
+<li>认为障碍物只会影响速度，不影响路径。</li>
+<li>忽略路径复用逻辑。</li>
+<li>认为 <code>Process</code> 直接发布轨迹。</li>
+<li>看到 <code>SL</code> 后仍按 XY 坐标理解。</li>
+</ul>
+<h2 id="10-自测题">10. 自测题</h2>
+<ol>
+<li>LaneFollowPath 的三个主要步骤是什么？</li>
+<li>路径为什么需要边界？</li>
+<li><code>PathBoundary</code> 和 <code>PathData</code> 有什么区别？</li>
+<li>路径优化后得到什么？</li>
+<li>路径评估至少检查哪些问题？</li>
+<li>最终路径写入哪里？</li>
+<li>为什么要先 <code>GetStartPointSLState</code>？</li>
+<li><code>path_reusable()</code> 有什么意义？</li>
+<li>路径 Task 会直接发布 <code>ADCTrajectory</code> 吗？</li>
+<li>用一句话概括 LaneFollowPath。</li>
+</ol>
+<h2 id="11-参考答案">11. 参考答案</h2>
+<ol>
+<li>决定路径边界、优化路径、评估路径。</li>
+<li>保证路径留在道路和障碍物允许的可行区域内。</li>
+<li>PathBoundary 是约束边界；PathData 是候选路径结果。</li>
+<li>一条或多条可评估的候选路径。</li>
+<li>路径为空、偏离参考线、越出道路、与障碍物碰撞、终点不合理等。</li>
+<li><code>ReferenceLineInfo::mutable_path_data()</code>。</li>
+<li>确定规划起点在参考线坐标系中的起点状态。</li>
+<li>避免路径未变化时重复计算，提高性能。</li>
+<li>不会。它只更新本轮 ReferenceLineInfo 中的路径数据。</li>
+<li>在边界约束内优化并选择一条可行驶的车道跟随路径。</li>
+</ol>
+<h2 id="12-过关检查">12. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能画出路径任务三步流程。</li>
+<li><input disabled="" type="checkbox"> 能解释 PathBoundary 和 PathData。</li>
+<li><input disabled="" type="checkbox"> 能找到最终路径写入位置。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="13-下一课衔接">13. 下一课衔接</h2>
+<p>下一课学习 <code>SpeedBoundsDecider</code>，看速度任务如何把障碍物投影到 S-T 图，并为后续速度优化准备边界。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-13.html"><small>上一课</small><strong>13 · Task 基类与生命周期</strong></a><a class="page-link next" href="lesson-15.html"><small>下一课</small><strong>15 · 速度 Task 示例 SpeedBoundsDecider</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="比较 Task 和 TrafficRule，阅读 TrafficDecider 与 TrafficLight 的规则执行方式。">
+    <title>TrafficRule 与 Task 的区别 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-16">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16" aria-current="page"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 16 - Traffic Rule</p>
+          <h1>TrafficRule 与 Task 的区别</h1>
+          <p class="lesson-summary">比较 Task 和 TrafficRule，阅读 TrafficDecider 与 TrafficLight 的规则执行方式。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 140 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 13 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。理解交通规则为什么单独成插件，以及它怎样影响路径和速度决策。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～140 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 13 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 说出 TrafficRule 与 Task 的相同点和不同点。</li>
+<li><input disabled="" type="checkbox"> 阅读 TrafficRule 基类。</li>
+<li><input disabled="" type="checkbox"> 解释 TrafficDecider 怎样加载和执行规则。</li>
+<li><input disabled="" type="checkbox"> 以 TrafficLight 为例理解规则输出。</li>
+<li><input disabled="" type="checkbox"> 知道什么时候应该新增 Task，什么时候应该新增 TrafficRule。</li>
+</ul>
+<h2 id="3-基本区别">3. 基本区别</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>Task</th>
+<th>TrafficRule</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>组织位置</td>
+<td>Stage 的 pipeline</td>
+<td>全局 traffic rule pipeline</td>
+</tr>
+<tr>
+<td>执行时机</td>
+<td>Stage 任务链中</td>
+<td>通常在 Plan 前统一执行</td>
+</tr>
+<tr>
+<td>关注内容</td>
+<td>某个阶段的具体计算</td>
+<td>全局交通规则和停走决策</td>
+</tr>
+<tr>
+<td>典型例子</td>
+<td>LaneFollowPath</td>
+<td>TrafficLight、StopSign、Crosswalk</td>
+</tr>
+<tr>
+<td>配置入口</td>
+<td><code>pipeline.pb.txt</code></td>
+<td><code>traffic_rule_config.pb.txt</code></td>
+</tr>
+</tbody></table>
+<p>一句话：</p>
+<pre><code class="language-text">Task 更像“步骤”，TrafficRule 更像“所有场景都适用的规则”。
+</code></pre>
+<h2 id="4-trafficrule-基类">4. TrafficRule 基类</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/traffic_rules_base/traffic_rule.h</code>，约第 37～66 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_rule.h，约第 37 行
+class TrafficRule {
+ public:
+  TrafficRule();
+  virtual ~TrafficRule() = default;
+
+  // 初始化规则名称和依赖
+  virtual bool Init(const std::string&amp; name,
+                    const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector);
+
+  // 每个具体规则必须实现 ApplyRule
+  virtual common::Status ApplyRule(
+      Frame* const frame, ReferenceLineInfo* const reference_line_info) = 0;
+
+  // 重置规则内部状态
+  virtual void Reset() = 0;
+
+ protected:
+  // 读取规则配置文件
+  template &lt;typename T&gt;
+  bool LoadConfig(T* config);
+
+  std::shared_ptr&lt;DependencyInjector&gt; injector_;
+  std::string config_path_;
+  std::string name_;
+};
+</code></pre>
+<p>和 Task 一样：</p>
+<ul>
+<li>有 <code>Init</code>。</li>
+<li>依赖配置。</li>
+<li>通过插件注册。</li>
+</ul>
+<p>和 Task 不同：</p>
+<ul>
+<li>核心接口叫 <code>ApplyRule</code>。</li>
+<li>更强调对 Frame 和 ReferenceLineInfo 施加规则。</li>
+<li>由 TrafficDecider 统一调度。</li>
+</ul>
+<h2 id="5-trafficdecider-加载规则">5. TrafficDecider 加载规则</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/traffic_rules_base/traffic_decider.cc</code>，约第 33～58 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_decider.cc，约第 33 行
+bool TrafficDecider::Init(const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) {
+  // 加载全局交通规则 pipeline 配置
+  if (!apollo::cyber::common::LoadConfig(FLAGS_traffic_rule_config_filename,
+                                         &amp;rule_pipeline_)) {
+    AERROR &lt;&lt; &quot;Load pipeline of Traffic decider failed!&quot;;
+    return false;
+  }
+
+  // 按配置顺序创建每一个规则插件
+  for (int i = 0; i &lt; rule_pipeline_.rule_size(); i++) {
+    auto rule = PluginManager::Instance()-&gt;CreateInstance&lt;TrafficRule&gt;(
+        ConfigUtil::GetFullPlanningClassName(
+            rule_pipeline_.rule(i).type()));
+
+    // 初始化规则并加入执行列表
+    rule-&gt;Init(rule_pipeline_.rule(i).name(), injector);
+    rule_list_.push_back(rule);
+  }
+
+  return true;
+}
+</code></pre>
+<p>配置文件：</p>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_component/conf/traffic_rule_config.pb.txt</code>。</p>
+</blockquote>
+<pre><code class="language-text"># 源码位置：traffic_rule_config.pb.txt
+rule {
+  name: &quot;CROSSWALK&quot;
+  type: &quot;Crosswalk&quot;
+}
+rule {
+  name: &quot;STOP_SIGN&quot;
+  type: &quot;StopSign&quot;
+}
+rule {
+  name: &quot;TRAFFIC_LIGHT&quot;
+  type: &quot;TrafficLight&quot;
+}
+</code></pre>
+<h2 id="6-trafficdecider-执行规则">6. TrafficDecider 执行规则</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/traffic_rules_base/traffic_decider.cc</code>，约第 98～116 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_decider.cc，约第 98 行
+Status TrafficDecider::Execute(Frame* frame,
+                               ReferenceLineInfo* reference_line_info) {
+  // 检查输入非空
+  CHECK_NOTNULL(frame);
+  CHECK_NOTNULL(reference_line_info);
+
+  // 依次应用每个交通规则
+  for (const auto&amp; rule : rule_list_) {
+    // 规则可以先清空自己的临时状态
+    rule-&gt;Reset();
+
+    // 规则读取 Frame 和参考线信息，产生交通决策
+    rule-&gt;ApplyRule(frame, reference_line_info);
+  }
+
+  // 根据规则产生的停车决策构建规划目标
+  BuildPlanningTarget(reference_line_info);
+  return Status::OK();
+}
+</code></pre>
+<h2 id="7-trafficlight-规则示例">7. TrafficLight 规则示例</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/traffic_rules/traffic_light/traffic_light.h</code>，约第 35～50 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_light.h，约第 35 行
+class TrafficLight : public TrafficRule {
+ public:
+  // 加载 TrafficLightConfig
+  bool Init(const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override;
+
+  // 规则的核心执行函数
+  common::Status ApplyRule(Frame* const frame,
+                           ReferenceLineInfo* const reference_line_info);
+
+  // TrafficLight 没有需要长期保留的临时状态
+  void Reset() override {}
+
+ private:
+  TrafficLightConfig config_;
+
+  // 根据地图和感知信号产生停走决策
+  void MakeDecisions(Frame* const frame,
+                     ReferenceLineInfo* const reference_line_info);
+
+  static constexpr char const* TRAFFIC_LIGHT_VO_ID_PREFIX = &quot;TL_&quot;;
+};
+</code></pre>
+<p>执行：</p>
+<blockquote>
+<p>源码位置：<code>modules/planning/traffic_rules/traffic_light/traffic_light.cc</code>，约第 51～56 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：traffic_light.cc，约第 51 行
+Status TrafficLight::ApplyRule(Frame* const frame,
+                               ReferenceLineInfo* const reference_line_info) {
+  // 进入交通灯决策计算
+  MakeDecisions(frame, reference_line_info);
+
+  return Status::OK();
+}
+</code></pre>
+<p>规则的核心输出不是直接生成最终轨迹，而是向 <code>ReferenceLineInfo</code> 添加障碍物、停车点或路径决策。</p>
+<h2 id="8-什么时候新增哪种插件">8. 什么时候新增哪种插件</h2>
+<p>新增 Task：</p>
+<ul>
+<li>只在某个 Stage 中执行。</li>
+<li>主要做路径、速度或局部决策计算。</li>
+<li>只影响当前阶段流水线。</li>
+</ul>
+<p>新增 TrafficRule：</p>
+<ul>
+<li>需要在所有场景中统一应用。</li>
+<li>主要处理交通标志、停止线、交通灯等规则。</li>
+<li>可能向多个 ReferenceLineInfo 写入停止或让行决策。</li>
+</ul>
+<h2 id="9-动手实验">9. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class TrafficRule|virtual bool Init|virtual common::Status ApplyRule|virtual void Reset&quot; modules\planning\planning_interface_base\traffic_rules_base\traffic_rule.h
+rg -n &quot;TrafficDecider::Init|CreateInstance&lt;TrafficRule&gt;|TrafficDecider::Execute|rule-&gt;ApplyRule&quot; modules\planning\planning_interface_base\traffic_rules_base\traffic_decider.cc
+rg -n &quot;class TrafficLight|ApplyRule|MakeDecisions&quot; modules\planning\traffic_rules\traffic_light\traffic_light.h modules\planning\traffic_rules\traffic_light\traffic_light.cc
+Get-Content modules\planning\planning_component\conf\traffic_rule_config.pb.txt
+</code></pre>
+<p>填写：</p>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>Task</th>
+<th>TrafficRule</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>配置在哪里</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>核心执行函数</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>例子</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="10-常见错误">10. 常见错误</h2>
+<ul>
+<li>认为 TrafficRule 和 Task 完全一样。</li>
+<li>在 Task 中重复实现全局交通灯规则。</li>
+<li>忘记在 TrafficRule pipeline 中注册新规则。</li>
+<li>以为 TrafficRule 会直接发布轨迹。</li>
+<li>把场景规则和全局规则混在一起。</li>
+</ul>
+<h2 id="11-自测题">11. 自测题</h2>
+<ol>
+<li>TrafficRule 的关注点是什么？</li>
+<li>Task 的关注点是什么？</li>
+<li>TrafficRule 的核心执行函数是什么？</li>
+<li>TrafficDecider 为什么需要规则列表？</li>
+<li>交通规则来自哪个配置文件？</li>
+<li>TrafficLight 的 <code>Reset</code> 为什么可以是空实现？</li>
+<li>交通规则产生的结果通常写入哪里？</li>
+<li>新增 Task 应配置在哪里？</li>
+<li>新增 TrafficRule 应配置在哪里？</li>
+<li>用一句话区分两者。</li>
+</ol>
+<h2 id="12-参考答案">12. 参考答案</h2>
+<ol>
+<li>全局交通规则和跨场景停走决策。</li>
+<li>某个 Stage 的具体计算步骤。</li>
+<li><code>ApplyRule</code>。</li>
+<li>统一加载、重置和执行多个规则插件。</li>
+<li><code>traffic_rule_config.pb.txt</code>。</li>
+<li>它不需要保留跨轮次临时状态。</li>
+<li>写入 Frame 和 ReferenceLineInfo 的决策/停车信息。</li>
+<li>场景的 <code>pipeline.pb.txt</code>。</li>
+<li><code>traffic_rule_config.pb.txt</code>。</li>
+<li>Task 是阶段步骤，TrafficRule 是全局规则。</li>
+</ol>
+<h2 id="13-过关检查">13. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能解释 Task 和 TrafficRule 的边界。</li>
+<li><input disabled="" type="checkbox"> 能找到 <code>ApplyRule</code>。</li>
+<li><input disabled="" type="checkbox"> 能读懂 traffic rule 配置。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="14-下一课衔接">14. 下一课衔接</h2>
+<p>下一课学习配置、插件和编译流程，把前面见过的 <code>pipeline.pb.txt</code>、<code>plugins.xml</code>、<code>buildtool</code> 串起来。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-15.html"><small>上一课</small><strong>15 · 速度 Task 示例 SpeedBoundsDecider</strong></a><a class="page-link next" href="lesson-17.html"><small>下一课</small><strong>17 · 配置、插件与编译</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

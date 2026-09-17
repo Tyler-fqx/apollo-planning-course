@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="理解 S-T 图、速度边界、限速计算和 StGraphData 输出。">
+    <title>速度 Task 示例 SpeedBoundsDecider | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-15">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15" aria-current="page"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 15 - Task</p>
+          <h1>速度 Task 示例 SpeedBoundsDecider</h1>
+          <p class="lesson-summary">理解 S-T 图、速度边界、限速计算和 StGraphData 输出。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>120 - 160 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 14 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。重点学习 S-T 图、速度边界和路径/速度的分工。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：120～160 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 14 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 说明 SpeedBoundsDecider 的输入和输出。</li>
+<li><input disabled="" type="checkbox"> 解释 S-T 图是什么。</li>
+<li><input disabled="" type="checkbox"> 区分路径边界和速度边界。</li>
+<li><input disabled="" type="checkbox"> 理解静态障碍物如何影响速度。</li>
+<li><input disabled="" type="checkbox"> 找到速度边界写入 StGraphData 的位置。</li>
+</ul>
+<h2 id="3-类定义">3. 类定义</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/speed_bounds_decider/speed_bounds_decider.h</code>，约第 32～51 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：speed_bounds_decider.h，约第 32 行
+class SpeedBoundsDecider : public Decider {
+ public:
+  bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override;
+
+ private:
+  common::Status Process(
+      Frame* const frame,
+      ReferenceLineInfo* const reference_line_info) override;
+
+  double SetSpeedFallbackDistance(PathDecision* const path_decision);
+
+  void RecordSTGraphDebug(
+      const StGraphData&amp; st_graph_data,
+      planning_internal::STGraphDebug* st_graph_debug) const;
+
+  SpeedBoundsDeciderConfig config_;
+};
+</code></pre>
+<h2 id="4-s-t-图的直觉">4. S-T 图的直觉</h2>
+<p>S-T 图：</p>
+<pre><code class="language-text">横轴：s，也就是沿路径行驶的距离
+纵轴：t，也就是时间
+</code></pre>
+<p>障碍物在 S-T 图中的区域表示：</p>
+<pre><code class="language-text">在某个时间段内，车辆不能在某个 s 区间通过
+</code></pre>
+<p>速度规划必须避开这些不可通行的时空区域。</p>
+<h2 id="5-process-主流程">5. Process 主流程</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/speed_bounds_decider/speed_bounds_decider.cc</code>，约第 53～110 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：speed_bounds_decider.cc，约第 53 行
+Status SpeedBoundsDecider::Process(
+    Frame* const frame, ReferenceLineInfo* const reference_line_info) {
+  // 取出已经生成好的路径数据
+  const PathData&amp; path_data = reference_line_info-&gt;path_data();
+
+  // 取出规划起点
+  const TrajectoryPoint&amp; init_point = frame-&gt;PlanningStartPoint();
+
+  // 取出参考线
+  const ReferenceLine&amp; reference_line = reference_line_info-&gt;reference_line();
+
+  // 取出路径决策，后面会读取障碍物
+  PathDecision* const path_decision = reference_line_info-&gt;path_decision();
+
+  // 创建 S-T 边界映射器
+  STBoundaryMapper boundary_mapper(
+      config_, reference_line, path_data, path_data.discretized_path().Length(),
+      config_.total_time(), injector_);
+
+  // 把路径障碍物映射成 S-T 边界
+  if (boundary_mapper.ComputeSTBoundary(path_decision).code() ==
+      ErrorCode::PLANNING_ERROR) {
+    return Status(ErrorCode::PLANNING_ERROR, &quot;Mapping obstacle failed.&quot;);
+  }
+
+  // 创建速度限制计算器
+  SpeedLimitDecider speed_limit_decider(config_, reference_line, path_data);
+
+  // 计算参考线、道路和障碍物带来的速度上限
+  SpeedLimit speed_limit;
+  if (!speed_limit_decider
+           .GetSpeedLimits(path_decision-&gt;obstacles(), &amp;speed_limit)
+           .ok()) {
+    return Status(ErrorCode::PLANNING_ERROR, &quot;Getting speed limits failed!&quot;);
+  }
+
+  return Status::OK();
+}
+</code></pre>
+<h2 id="6-关键步骤">6. 关键步骤</h2>
+<h3 id="步骤一-创建-s-t-边界映射器">步骤一：创建 S-T 边界映射器</h3>
+<p>输入包括速度任务配置、参考线、路径、路径长度、时间范围和依赖注入器。</p>
+<h3 id="步骤二-映射障碍物">步骤二：映射障碍物</h3>
+<pre><code class="language-cpp">boundary_mapper.ComputeSTBoundary(path_decision)
+</code></pre>
+<p>作用：</p>
+<pre><code class="language-text">把障碍物从空间中的位置转换成“什么时间不能到达什么 s 区间”
+</code></pre>
+<h3 id="步骤三-计算速度限制">步骤三：计算速度限制</h3>
+<pre><code class="language-cpp">SpeedLimitDecider::GetSpeedLimits(...)
+</code></pre>
+<p>会综合考虑道路限速、参考线曲率、障碍物和车辆动力学或任务配置。</p>
+<h3 id="步骤四-写回-stgraphdata">步骤四：写回 StGraphData</h3>
+<blockquote>
+<p>源码位置：<code>modules/planning/tasks/speed_bounds_decider/speed_bounds_decider.cc</code>，约第 117～130 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：speed_bounds_decider.cc，约第 117 行
+StGraphData* st_graph_data = reference_line_info_-&gt;mutable_st_graph_data();
+
+// 保存 S-T 边界和速度限制，供后续速度优化任务使用
+st_graph_data-&gt;LoadData(boundaries, min_s_on_st_boundaries, init_point,
+                        path_data, speed_limit, config_.total_time());
+</code></pre>
+<p>输出不是最终速度曲线，后面的优化器会在此基础上生成平滑速度曲线。</p>
+<h2 id="7-路径任务和速度任务的分工">7. 路径任务和速度任务的分工</h2>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>主要回答</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LaneFollowPath</td>
+<td>车辆准备沿哪条路径走</td>
+</tr>
+<tr>
+<td>SpeedBoundsDecider</td>
+<td>哪些时空区域不能进入，速度上限是多少</td>
+</tr>
+<tr>
+<td>SpeedDecider</td>
+<td>每个位置目标速度怎样决策</td>
+</tr>
+<tr>
+<td>PiecewiseJerkSpeedOptimizer</td>
+<td>生成平滑、可执行的速度曲线</td>
+</tr>
+</tbody></table>
+<h2 id="8-动手实验">8. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class SpeedBoundsDecider|Process\(|SetSpeedFallbackDistance|RecordSTGraphDebug&quot; modules\planning\tasks\speed_bounds_decider\speed_bounds_decider.h
+rg -n &quot;SpeedBoundsDecider::Process|STBoundaryMapper|ComputeSTBoundary|GetSpeedLimits|mutable_st_graph_data|LoadData&quot; modules\planning\tasks\speed_bounds_decider\speed_bounds_decider.cc
+Get-Content modules\planning\tasks\speed_bounds_decider\README_cn.md
+</code></pre>
+<p>填写图：</p>
+<pre><code class="language-text">PathData + Obstacles
+  -&gt; ______________
+  -&gt; SpeedLimit
+  -&gt; StGraphData
+  -&gt; 后续速度优化
+</code></pre>
+<h2 id="9-常见错误">9. 常见错误</h2>
+<ul>
+<li>把 S-T 图当成普通 X-Y 地图。</li>
+<li>认为速度任务重新生成路径。</li>
+<li>认为 SpeedBoundsDecider 输出最终速度轨迹。</li>
+<li>忽略路径长度对 S-T 映射的影响。</li>
+<li>只读速度值，不读障碍物和边界。</li>
+</ul>
+<h2 id="10-自测题">10. 自测题</h2>
+<ol>
+<li>SpeedBoundsDecider 的直接父类是什么？</li>
+<li>S-T 图的横轴和纵轴分别是什么？</li>
+<li>为什么必须先有路径？</li>
+<li><code>STBoundaryMapper</code> 做什么？</li>
+<li><code>SpeedLimitDecider</code> 计算什么？</li>
+<li>输出保存到哪个对象？</li>
+<li>SpeedBoundsDecider 会生成最终速度曲线吗？</li>
+<li>速度边界对哪个后续任务最重要？</li>
+<li>静态障碍物为什么会影响速度？</li>
+<li>用一句话概括 SpeedBoundsDecider。</li>
+</ol>
+<h2 id="11-参考答案">11. 参考答案</h2>
+<ol>
+<li><code>Decider</code>。</li>
+<li>横轴是沿路径距离 s，纵轴是时间 t。</li>
+<li>因为 S 坐标和路径长度依赖已经生成好的路径。</li>
+<li>把路径上的障碍物转换成 S-T 图中的禁行边界。</li>
+<li>计算道路、参考线和障碍物等带来的速度上限。</li>
+<li><code>ReferenceLineInfo::mutable_st_graph_data()</code>。</li>
+<li>不会，它准备边界和限速，最终曲线由后续优化器生成。</li>
+<li><code>PiecewiseJerkSpeedOptimizer</code> 等速度优化任务。</li>
+<li>因为车辆必须减速、停车或等待，才能避免在错误时间进入障碍物区域。</li>
+<li>把路径和障碍物转换为 S-T 边界与速度限制，供后续速度优化使用。</li>
+</ol>
+<h2 id="12-过关检查">12. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能解释 S-T 图。</li>
+<li><input disabled="" type="checkbox"> 能画出速度任务输出。</li>
+<li><input disabled="" type="checkbox"> 能区分路径和速度任务。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="13-下一课衔接">13. 下一课衔接</h2>
+<p>下一课比较 Task 与 TrafficRule，理解为什么交通灯、停止牌和人行横道更偏向全局规则插件。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-14.html"><small>上一课</small><strong>14 · 路径 Task 示例 LaneFollowPath</strong></a><a class="page-link next" href="lesson-16.html"><small>下一课</small><strong>16 · TrafficRule 与 Task 的区别</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

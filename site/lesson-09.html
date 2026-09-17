@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="读懂 task_list_、scenario_list_、shared_ptr 和 unique_ptr 的所有权语义。">
+    <title>vector 与智能指针 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-09">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09" aria-current="page"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 09 - C++ Survival</p>
+          <h1>vector 与智能指针</h1>
+          <p class="lesson-summary">读懂 task_list_、scenario_list_、shared_ptr 和 unique_ptr 的所有权语义。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>基础</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 140 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 08 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。掌握阅读 <code>task_list_</code>、<code>scenario_list_</code> 和 <code>planning_base_</code> 所需的基础。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～140 分钟。</li>
+<li>难度：基础。</li>
+<li>前置：第 08 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 读懂 <code>std::vector&lt;T&gt;</code>。</li>
+<li><input disabled="" type="checkbox"> 读懂范围 for 循环。</li>
+<li><input disabled="" type="checkbox"> 理解 <code>std::unique_ptr</code> 和 <code>std::shared_ptr</code> 的用途。</li>
+<li><input disabled="" type="checkbox"> 解释 <code>task_list_</code> 保存什么。</li>
+<li><input disabled="" type="checkbox"> 解释为什么 Stage 使用 <code>shared_ptr&lt;Task&gt;</code>。</li>
+</ul>
+<h2 id="3-vector-动态数组">3. vector：动态数组</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.h</code>，约第 86～88 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.h，约第 86 行
+// vector 可以保存一组同类型对象，数量可以在运行时变化
+std::vector&lt;std::shared_ptr&lt;Task&gt;&gt; task_list_;
+
+// 当某个任务失败时使用的备用任务
+std::shared_ptr&lt;Task&gt; fallback_task_;
+</code></pre>
+<p><code>std::vector&lt;std::shared_ptr&lt;Task&gt;&gt;</code> 可以读作：</p>
+<pre><code class="language-text">一个动态数组
+  每个元素都是一个指向 Task 的共享智能指针
+</code></pre>
+<h2 id="4-遍历-task-list">4. 遍历 task_list_</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 121～124 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.cc，约第 121 行
+for (auto task : task_list_) {
+  // task 依次表示列表中的一个智能指针
+  ret = task-&gt;Execute(frame, &amp;reference_line_info);
+}
+</code></pre>
+<p>范围 for 等价逻辑：</p>
+<pre><code class="language-text">从 task_list_ 第一个元素开始
+每次取出一个 task
+执行 task-&gt;Execute(...)
+直到列表结束或提前 break
+</code></pre>
+<h2 id="5-更常见的引用遍历">5. 更常见的引用遍历</h2>
+<pre><code class="language-cpp">// 教学代码：避免复制大对象
+for (const auto&amp; task : task_list_) {
+  // const auto&amp; 表示只读引用 task
+  task-&gt;Execute(frame, reference_line_info);
+}
+</code></pre>
+<p>注意：</p>
+<ul>
+<li><code>auto</code> 会自动推断类型。</li>
+<li><code>auto&amp;</code> 是引用，不复制。</li>
+<li><code>const auto&amp;</code> 是只读引用。</li>
+</ul>
+<h2 id="6-shared-ptr-共享所有权">6. shared_ptr：共享所有权</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_component/planning_base.h</code>，约第 94～102 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：planning_base.h，约第 94 行
+// Frame 由 PlanningBase 独占管理
+std::unique_ptr&lt;Frame&gt; frame_;
+
+// Planner 插件由智能指针管理
+std::shared_ptr&lt;Planner&gt; planner_;
+
+// 依赖注入器可被多个对象共享
+std::shared_ptr&lt;DependencyInjector&gt; injector_;
+</code></pre>
+<p><code>shared_ptr</code> 的特点：</p>
+<ul>
+<li>多个地方可以共同持有同一个对象。</li>
+<li>内部引用计数归零后，对象自动释放。</li>
+<li>不需要手动 <code>delete</code>。</li>
+</ul>
+<h2 id="7-unique-ptr-独占所有权">7. unique_ptr：独占所有权</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_component/planning_component.h</code>，约第 89～94 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：planning_component.h，约第 89 行
+// PlanningComponent 独占拥有 PlanningBase
+std::unique_ptr&lt;PlanningBase&gt; planning_base_;
+
+// 依赖注入器可以共享
+std::shared_ptr&lt;DependencyInjector&gt; injector_;
+</code></pre>
+<p><code>unique_ptr</code> 的特点：</p>
+<ul>
+<li>同一时间只有一个所有者。</li>
+<li>不能随意复制。</li>
+<li>适合明确只有一个对象负责销毁的情况。</li>
+</ul>
+<h2 id="8-创建智能指针">8. 创建智能指针</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_component/planning_component.cc</code>，约第 45～51 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：planning_component.cc，约第 45 行
+// 创建共享的依赖注入器
+injector_ = std::make_shared&lt;DependencyInjector&gt;();
+
+if (FLAGS_use_navigation_mode) {
+  // 创建独占的 NaviPlanning 对象
+  planning_base_ = std::make_unique&lt;NaviPlanning&gt;(injector_);
+} else {
+  // 创建独占的 OnLanePlanning 对象
+  planning_base_ = std::make_unique&lt;OnLanePlanning&gt;(injector_);
+}
+</code></pre>
+<p>推荐写法：</p>
+<pre><code class="language-text">make_shared&lt;T&gt;() -&gt; 创建 shared_ptr&lt;T&gt;
+make_unique&lt;T&gt;() -&gt; 创建 unique_ptr&lt;T&gt;
+</code></pre>
+<p>不要一开始就学习手动 <code>new</code> 和 <code>delete</code>。先读懂智能指针表达的所有权即可。</p>
+<h2 id="9-scenariomanager-中的容器">9. ScenarioManager 中的容器</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planners/public_road/scenario_manager.h</code>，约第 44～53 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario_manager.h，约第 44 行
+// 当前场景
+std::shared_ptr&lt;Scenario&gt; current_scenario_;
+
+// 默认场景，例如 LaneFollow
+std::shared_ptr&lt;Scenario&gt; default_scenario_type_;
+
+// 配置中加载出来的全部场景
+std::vector&lt;std::shared_ptr&lt;Scenario&gt;&gt; scenario_list_;
+</code></pre>
+<p>理解方式：</p>
+<pre><code class="language-text">scenario_list_ 保存候选场景
+current_scenario_ 指向当前正在运行的场景
+default_scenario_type_ 保存兜底默认场景
+</code></pre>
+<h2 id="10-动手实验">10. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;vector&lt;std::shared_ptr&lt;Task&gt;&gt;|shared_ptr&lt;Task&gt;&quot; modules\planning\planning_interface_base\scenario_base\stage.h
+rg -n &quot;make_shared|make_unique&quot; modules\planning\planning_component\planning_component.cc
+rg -n &quot;unique_ptr&lt;|shared_ptr&lt;|vector&lt;std::shared_ptr&quot; modules\planning\planning_component\planning_base.h modules\planning\planners\public_road\scenario_manager.h
+</code></pre>
+<p>填写：</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>所有权含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>unique_ptr</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>shared_ptr</code></td>
+<td></td>
+</tr>
+<tr>
+<td><code>vector&lt;T&gt;</code></td>
+<td></td>
+</tr>
+</tbody></table>
+<h2 id="11-常见错误">11. 常见错误</h2>
+<ul>
+<li>把 <code>shared_ptr</code> 当成普通指针，不知道它会自动释放对象。</li>
+<li>以为 <code>unique_ptr</code> 可以随意复制。</li>
+<li>看到 <code>auto</code> 就不知道类型，忽略右侧表达式。</li>
+<li>认为 <code>vector</code> 是固定长度数组。</li>
+<li>不区分“容器本身”和“容器中元素的所有权”。</li>
+</ul>
+<h2 id="12-自测题">12. 自测题</h2>
+<ol>
+<li><code>vector</code> 的作用是什么？</li>
+<li><code>task_list_</code> 保存什么？</li>
+<li>Stage 如何遍历任务？</li>
+<li><code>shared_ptr</code> 和 <code>unique_ptr</code> 的最大区别是什么？</li>
+<li>为什么 <code>injector_</code> 适合 shared_ptr？</li>
+<li>为什么 <code>frame_</code> 适合 unique_ptr？</li>
+<li><code>make_shared</code> 和 <code>make_unique</code> 做什么？</li>
+<li><code>scenario_list_</code> 的作用是什么？</li>
+<li><code>current_scenario_</code> 和 <code>scenario_list_</code> 有什么关系？</li>
+<li>阅读智能指针时最重要的判断是什么？</li>
+</ol>
+<h2 id="13-参考答案">13. 参考答案</h2>
+<ol>
+<li>保存一组可动态增删的同类型元素。</li>
+<li>当前 Stage 要执行的多个 Task 智能指针。</li>
+<li>使用范围 for 依次执行每个 <code>task-&gt;Execute(...)</code>。</li>
+<li>shared_ptr 可以共享所有权，unique_ptr 只能有一个所有者。</li>
+<li>多个 Planning 对象可能需要访问同一个依赖集合。</li>
+<li>每一轮 Frame 通常由一个 PlanningBase 独占管理。</li>
+<li>分别创建并返回 shared_ptr 和 unique_ptr。</li>
+<li>保存配置加载出来的全部候选场景。</li>
+<li>current_scenario_ 指向 scenario_list_ 中的某一个场景。</li>
+<li>判断谁拥有对象、谁负责释放对象。</li>
+</ol>
+<h2 id="14-过关检查">14. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能读懂 vector 和范围 for。</li>
+<li><input disabled="" type="checkbox"> 能区分 shared_ptr 和 unique_ptr。</li>
+<li><input disabled="" type="checkbox"> 能解释 task_list_ 的所有权。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="15-下一课衔接">15. 下一课衔接</h2>
+<p>下一课进入 ScenarioManager，观察场景列表如何加载、当前场景如何切换，以及默认场景为什么通常回到 LaneFollow。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-08.html"><small>上一课</small><strong>08 · 继承、虚函数与 override</strong></a><a class="page-link next" href="lesson-10.html"><small>下一课</small><strong>10 · ScenarioManager 与场景切换</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

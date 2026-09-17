@@ -1,0 +1,7 @@
+apollo-planning-site.zip
+.DS_Store
+Thumbs.db
+*.log
+tools/debug-*.cjs
+tools/check-*.cjs
+site/screenshots/

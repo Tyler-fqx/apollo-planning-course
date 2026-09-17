@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="学习 Task::Init、Execute、Process、配置路径和新增 Task 的最低结构。">
+    <title>Task 基类与生命周期 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-13">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13" aria-current="page"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 13 - Task</p>
+          <h1>Task 基类与生命周期</h1>
+          <p class="lesson-summary">学习 Task::Init、Execute、Process、配置路径和新增 Task 的最低结构。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>80 - 110 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 12 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。本课不关心某个算法，只关心所有 Task 共有的结构和执行方式。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：80～110 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 12 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 说明 <code>Task::Init</code> 和 <code>Task::Execute</code> 的职责。</li>
+<li><input disabled="" type="checkbox"> 读懂 <code>frame_</code>、<code>reference_line_info_</code>、<code>injector_</code>。</li>
+<li><input disabled="" type="checkbox"> 理解配置路径如何生成。</li>
+<li><input disabled="" type="checkbox"> 区分基类 Execute 和具体 Task 的 Process。</li>
+<li><input disabled="" type="checkbox"> 知道新增 Task 时最少要写哪些方法。</li>
+</ul>
+<h2 id="3-task-的类定义">3. Task 的类定义</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 37～70 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 37 行
+class Task {
+ public:
+  Task();
+  virtual ~Task() = default;
+
+  const std::string&amp; Name() const;
+
+  // 初始化：接收配置目录、任务名和依赖注入器
+  virtual bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+                    const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector);
+
+  // 执行：处理 Frame 和 ReferenceLineInfo
+  virtual common::Status Execute(Frame* frame,
+                                 ReferenceLineInfo* reference_line_info);
+
+  virtual common::Status Execute(Frame* frame);
+
+ protected:
+  // 从配置文件加载 T 类型参数
+  template &lt;typename T&gt;
+  bool LoadConfig(T* config);
+
+  // 当前轮次上下文
+  Frame* frame_;
+  ReferenceLineInfo* reference_line_info_;
+
+  // 公共依赖
+  std::shared_ptr&lt;DependencyInjector&gt; injector_;
+
+  // 配置路径和名称
+  std::string config_path_;
+  std::string default_config_path_;
+  std::string name_;
+};
+</code></pre>
+<h2 id="4-task-初始化">4. Task 初始化</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.cc</code>，约第 40～57 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.cc，约第 40 行
+bool Task::Init(const std::string&amp; config_dir, const std::string&amp; name,
+                const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) {
+  // 保存公共依赖，后续 Execute 中可以直接使用
+  injector_ = injector;
+
+  // 保存任务名称
+  name_ = name;
+
+  // 根据配置目录和任务名称生成实例配置路径
+  config_path_ =
+      config_dir + &quot;/&quot; + ConfigUtil::TransformToPathName(name) + &quot;.pb.txt&quot;;
+
+  // 取得当前具体类的完整名称
+  int status;
+  std::string class_name =
+      abi::__cxa_demangle(typeid(*this).name(), 0, 0, &amp;status);
+
+  // 找到插件默认配置
+  default_config_path_ =
+      apollo::cyber::plugin_manager::PluginManager::Instance()
+          -&gt;GetPluginConfPath&lt;Task&gt;(class_name, &quot;conf/default_conf.pb.txt&quot;);
+
+  return true;
+}
+</code></pre>
+<p>生命周期第一阶段：</p>
+<pre><code class="language-text">创建 Task
+  -&gt; 调用 Init
+  -&gt; 保存依赖、名称、配置路径
+</code></pre>
+<h2 id="5-task-执行">5. Task 执行</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.cc</code>，约第 60～68 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.cc，约第 60 行
+Status Task::Execute(Frame* frame, ReferenceLineInfo* reference_line_info) {
+  // 保存本轮 Frame 地址，具体 Process 中可以读取和修改
+  frame_ = frame;
+
+  // 保存当前参考线信息
+  reference_line_info_ = reference_line_info;
+
+  // 基础 Task 默认返回成功
+  return Status::OK();
+}
+</code></pre>
+<p>但对于具体算法 Task，通常不会直接重写 <code>Task::Execute</code>，而是通过 <code>PathGeneration</code> 或 <code>Decider</code> 的基类流程调用 <code>Process</code>。</p>
+<h2 id="6-pathgeneration-和-decider">6. PathGeneration 和 Decider</h2>
+<blockquote>
+<p>源码位置：</p>
+<ul>
+<li><code>modules/planning/planning_interface_base/task_base/common/path_generation.h</code>，约第 31～43 行。</li>
+<li><code>modules/planning/planning_interface_base/task_base/common/decider.h</code>，约第 32～43 行。</li>
+</ul>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：path_generation.h，约第 31 行
+class PathGeneration : public Task {
+ public:
+  apollo::common::Status Execute(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+
+ protected:
+  virtual apollo::common::Status Process(
+      Frame* frame, ReferenceLineInfo* reference_line_info) {
+    return apollo::common::Status::OK();
+  }
+};
+
+// 源码位置：decider.h，约第 32 行
+class Decider : public Task {
+ public:
+  apollo::common::Status Execute(
+      Frame* frame, ReferenceLineInfo* reference_line_info) override;
+};
+</code></pre>
+<p>可以理解为：</p>
+<pre><code class="language-text">Task 定义统一生命周期
+PathGeneration / Decider 补充中间流程
+具体 Task 实现 Process
+</code></pre>
+<h2 id="7-新增-task-的最低结构">7. 新增 Task 的最低结构</h2>
+<p>教学伪代码：</p>
+<pre><code class="language-cpp">// 教学示例，不是官方源码
+class MyTask : public Decider {
+ public:
+  bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+            const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector) override {
+    if (!Decider::Init(config_dir, name, injector)) {
+      return false;
+    }
+    return Decider::LoadConfig&lt;MyTaskConfig&gt;(&amp;config_);
+  }
+
+ private:
+  common::Status Process(Frame* frame,
+                         ReferenceLineInfo* reference_line_info) override {
+    // 在这里读取 Frame、产生日志或修改规划决策
+    return common::Status::OK();
+  }
+
+  MyTaskConfig config_;
+};
+
+// 注册为插件
+CYBER_PLUGIN_MANAGER_REGISTER_PLUGIN(apollo::planning::MyTask, Task)
+</code></pre>
+<h2 id="8-动手实验">8. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class Task|bool Init|Status Execute|Frame\* frame_|ReferenceLineInfo\* reference_line_info_|std::shared_ptr&lt;DependencyInjector&gt;&quot; modules\planning\planning_interface_base\task_base\task.h
+rg -n &quot;Task::Init|Task::Execute|config_path_|default_config_path_&quot; modules\planning\planning_interface_base\task_base\task.cc
+rg -n &quot;class PathGeneration|class Decider|virtual common::Status Process&quot; modules\planning\planning_interface_base\task_base\common
+</code></pre>
+<p>填写生命周期：</p>
+<pre><code class="language-text">创建对象
+  -&gt; __________________
+  -&gt; __________________
+  -&gt; __________________
+</code></pre>
+<h2 id="9-常见错误">9. 常见错误</h2>
+<ul>
+<li>只写 <code>Process</code>，忘记 <code>Init</code>。</li>
+<li>忘记调用父类 <code>Init</code>。</li>
+<li>忘记加载配置文件。</li>
+<li>忘记插件注册。</li>
+<li>直接在 <code>Execute</code> 中写复杂逻辑，忽略基类框架的职责。</li>
+</ul>
+<h2 id="10-自测题">10. 自测题</h2>
+<ol>
+<li>Task 的两个生命周期方法是什么？</li>
+<li><code>Init</code> 保存哪些关键信息？</li>
+<li><code>Execute</code> 为什么要保存 <code>frame_</code>？</li>
+<li><code>injector_</code> 提供什么？</li>
+<li><code>config_path_</code> 和 <code>default_config_path_</code> 有什么区别？</li>
+<li><code>PathGeneration</code> 和 <code>Decider</code> 的直接父类是什么？</li>
+<li>具体路径 Task 通常实现哪个函数？</li>
+<li>新增 Task 为什么需要插件注册？</li>
+<li><code>Status::OK()</code> 表示什么？</li>
+<li>用一句话概括 Task 生命周期。</li>
+</ol>
+<h2 id="11-参考答案">11. 参考答案</h2>
+<ol>
+<li><code>Init</code> 和 <code>Execute</code>。</li>
+<li>配置目录、任务名称、依赖注入器、配置路径。</li>
+<li>后续成员函数可以通过 <code>frame_</code> 访问本轮规划上下文。</li>
+<li>车辆状态、历史信息、规划上下文等公共依赖。</li>
+<li><code>config_path_</code> 是实例配置路径，<code>default_config_path_</code> 是插件默认配置路径。</li>
+<li>Task。</li>
+<li><code>Process</code>。</li>
+<li>让框架能按配置中的 type 创建这个 Task。</li>
+<li>执行成功。</li>
+<li>Init 完成配置和依赖准备，Execute 进入任务处理流程。</li>
+</ol>
+<h2 id="12-过关检查">12. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能解释 Task 生命周期。</li>
+<li><input disabled="" type="checkbox"> 能找到三个关键成员变量。</li>
+<li><input disabled="" type="checkbox"> 能解释 Process 和 Execute 的关系。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="13-下一课衔接">13. 下一课衔接</h2>
+<p>下一课进入真实路径 Task：<code>LaneFollowPath</code>。你会看到“路径边界 -&gt; 优化 -&gt; 评估 -&gt; 写入 ReferenceLineInfo”的完整步骤。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-12.html"><small>上一课</small><strong>12 · Stage 如何执行 Task</strong></a><a class="page-link next" href="lesson-14.html"><small>下一课</small><strong>14 · 路径 Task 示例 LaneFollowPath</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

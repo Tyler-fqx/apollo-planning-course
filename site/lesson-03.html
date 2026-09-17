@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="用生活化模型理解三层结构，并阅读三个基类和 LaneFollow pipeline 配置。">
+    <title>Scenario、Stage 和 Task | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-03">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03" aria-current="page"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 03 - Core Structure</p>
+          <h1>Scenario、Stage 和 Task</h1>
+          <p class="lesson-summary">用生活化模型理解三层结构，并阅读三个基类和 LaneFollow pipeline 配置。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>入门</span>
+            <span class="meta-pill"><strong>用时</strong>80 - 120 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 02 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。本课建立 Planning 最重要的三层结构，不要求理解具体算法。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：80～120 分钟。</li>
+<li>难度：入门。</li>
+<li>前置：第 02 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 用生活例子解释 Scenario、Stage、Task。</li>
+<li><input disabled="" type="checkbox"> 说明三者在代码中的继承关系。</li>
+<li><input disabled="" type="checkbox"> 找到 <code>Scenario::Process</code>、<code>Stage::ExecuteTaskOnReferenceLine</code> 和 <code>Task::Execute</code>。</li>
+<li><input disabled="" type="checkbox"> 阅读一个场景的 pipeline 配置。</li>
+<li><input disabled="" type="checkbox"> 解释为什么 Task 会按顺序执行。</li>
+</ul>
+<h2 id="3-概念模型">3. 概念模型</h2>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>一句话</th>
+<th>生活类比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Scenario</td>
+<td>当前属于什么驾驶情境</td>
+<td>今天遇到停止牌路口</td>
+</tr>
+<tr>
+<td>Stage</td>
+<td>当前情境进行到哪一步</td>
+<td>接近、停车、观察、通过</td>
+</tr>
+<tr>
+<td>Task</td>
+<td>这一阶段要完成什么工作</td>
+<td>计算路径、检查障碍物、决定速度</td>
+</tr>
+</tbody></table>
+<p>关系：</p>
+<pre><code class="language-text">Scenario
+  -&gt; Stage
+      -&gt; Task
+      -&gt; Task
+      -&gt; Task
+</code></pre>
+<h2 id="4-源码地图">4. 源码地图</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>本课关注内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>modules/planning/planning_interface_base/scenario_base/scenario.h</code></td>
+<td>Scenario 基类</td>
+</tr>
+<tr>
+<td><code>modules/planning/planning_interface_base/scenario_base/stage.h</code></td>
+<td>Stage 基类</td>
+</tr>
+<tr>
+<td><code>modules/planning/planning_interface_base/task_base/task.h</code></td>
+<td>Task 基类</td>
+</tr>
+<tr>
+<td><code>modules/planning/scenarios/lane_follow/conf/pipeline.pb.txt</code></td>
+<td>Stage 和 Task 顺序配置</td>
+</tr>
+<tr>
+<td><code>modules/planning/scenarios/lane_follow/lane_follow_scenario.h</code></td>
+<td>LaneFollow 场景</td>
+</tr>
+</tbody></table>
+<h2 id="5-scenario-基类">5. Scenario 基类</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/scenario.h</code>，约第 52～119 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：scenario.h，约第 52 行
+class Scenario {
+ public:
+  // 判断是否允许从其他场景切换到当前场景
+  virtual bool IsTransferable(const Scenario* other_scenario,
+                              const Frame&amp; frame) {
+    return false;  // 基类默认不允许切换
+  }
+
+  // 运行当前场景中的 Stage
+  virtual ScenarioResult Process(
+      const common::TrajectoryPoint&amp; planning_init_point, Frame* frame);
+
+  // 当前正在执行的 Stage
+  std::shared_ptr&lt;Stage&gt; current_stage_;
+
+  // 配置中每个 Stage 名称对应的配置
+  std::unordered_map&lt;std::string, const StagePipeline*&gt; stage_pipeline_map_;
+};
+</code></pre>
+<p>先理解两点：</p>
+<ol>
+<li>Scenario 管的是整个驾驶情境，不是某一个算法。</li>
+<li>Scenario 会选择并运行当前 Stage。</li>
+</ol>
+<h2 id="6-stage-基类">6. Stage 基类</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.h</code>，约第 42～93 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.h，约第 42 行
+class Stage {
+ public:
+  // 每个 Stage 必须实现自己的处理逻辑
+  virtual StageResult Process(
+      const common::TrajectoryPoint&amp; planning_init_point, Frame* frame) = 0;
+
+ protected:
+  // 依次执行配置中登记的 Task
+  StageResult ExecuteTaskOnReferenceLine(
+      const common::TrajectoryPoint&amp; planning_start_point, Frame* frame);
+
+  // 同一 Stage 中的任务列表
+  std::vector&lt;std::shared_ptr&lt;Task&gt;&gt; task_list_;
+
+  // 某个任务失败时使用的回退任务
+  std::shared_ptr&lt;Task&gt; fallback_task_;
+};
+</code></pre>
+<p><code>= 0</code> 表示纯虚函数。基类只规定接口，具体 Stage 必须实现 <code>Process</code>。</p>
+<h2 id="7-task-基类">7. Task 基类</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/task_base/task.h</code>，约第 37～70 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：task.h，约第 37 行
+class Task {
+ public:
+  // Task 初始化时读取配置并保存依赖
+  virtual bool Init(const std::string&amp; config_dir, const std::string&amp; name,
+                    const std::shared_ptr&lt;DependencyInjector&gt;&amp; injector);
+
+  // 在指定参考线上执行任务
+  virtual common::Status Execute(Frame* frame,
+                                 ReferenceLineInfo* reference_line_info);
+
+ protected:
+  // 当前轮次的 Frame
+  Frame* frame_;
+
+  // 当前正在处理的参考线信息
+  ReferenceLineInfo* reference_line_info_;
+};
+</code></pre>
+<p>一个 Task 通常只做一件具体事情，例如计算路径边界、检查交通灯或生成速度边界。</p>
+<h2 id="8-stage-如何执行-task">8. Stage 如何执行 Task</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/planning_interface_base/scenario_base/stage.cc</code>，约第 101～145 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：stage.cc，约第 101 行
+StageResult Stage::ExecuteTaskOnReferenceLine(
+    const common::TrajectoryPoint&amp; planning_start_point, Frame* frame) {
+  // 依次取出 task_list_ 中的任务
+  for (auto task : task_list_) {
+    // 每个 Task 都接收同一个 Frame 和 ReferenceLineInfo
+    common::Status ret = task-&gt;Execute(frame, &amp;reference_line_info);
+
+    // 某个 Task 失败，就结束当前任务链
+    if (!ret.ok()) {
+      break;
+    }
+  }
+
+  // 如果任务失败，执行回退任务
+  if (!ret.ok()) {
+    fallback_task_-&gt;Execute(frame, &amp;reference_line_info);
+  }
+}
+</code></pre>
+<p>关键结论：</p>
+<ul>
+<li>Stage 负责顺序和执行结果。</li>
+<li>Task 负责具体计算。</li>
+<li>Task 可以读写同一个 Frame 和 ReferenceLineInfo。</li>
+</ul>
+<h2 id="9-lanefollow-的-pipeline-配置">9. LaneFollow 的 pipeline 配置</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/conf/pipeline.pb.txt</code>，第 1 行起。</p>
+</blockquote>
+<pre><code class="language-text"># 源码位置：lane_follow/conf/pipeline.pb.txt
+stage {
+  name: &quot;LANE_FOLLOW_STAGE&quot;     # Stage 运行名称
+  type: &quot;LaneFollowStage&quot;       # 对应的 C++ 实现类
+
+  task {
+    name: &quot;LANE_CHANGE_PATH&quot;    # 变道路径任务
+    type: &quot;LaneChangePath&quot;
+  }
+  task {
+    name: &quot;LANE_FOLLOW_PATH&quot;    # 车道跟随路径任务
+    type: &quot;LaneFollowPath&quot;
+  }
+  task {
+    name: &quot;PATH_DECIDER&quot;        # 路径决策任务
+    type: &quot;PathDecider&quot;
+  }
+  task {
+    name: &quot;SPEED_BOUNDS_PRIORI_DECIDER&quot;
+    type: &quot;SpeedBoundsDecider&quot;  # 速度边界任务
+  }
+  task {
+    name: &quot;PIECEWISE_JERK_SPEED&quot;
+    type: &quot;PiecewiseJerkSpeedOptimizer&quot;
+  }
+}
+</code></pre>
+<p>配置的作用：</p>
+<pre><code class="language-text">告诉 Stage 创建哪些 Task，以及按什么顺序执行
+</code></pre>
+<h2 id="10-动手实验">10. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class Scenario|virtual bool IsTransferable|virtual ScenarioResult Process&quot; modules\planning\planning_interface_base\scenario_base\scenario.h
+rg -n &quot;class Stage|task_list_|ExecuteTaskOnReferenceLine&quot; modules\planning\planning_interface_base\scenario_base\stage.h modules\planning\planning_interface_base\scenario_base\stage.cc
+rg -n &quot;class Task|virtual common::Status Execute&quot; modules\planning\planning_interface_base\task_base\task.h
+Get-Content modules\planning\scenarios\lane_follow\conf\pipeline.pb.txt
+</code></pre>
+<p>画图：</p>
+<pre><code class="language-text">LaneFollowScenario
+  -&gt; LaneFollowStage
+      -&gt; Task 1
+      -&gt; Task 2
+      -&gt; Task 3
+</code></pre>
+<h2 id="11-常见错误">11. 常见错误</h2>
+<ul>
+<li>把 Scenario 当成 Stage。</li>
+<li>把 Task 当成普通函数，忽略它可能保存状态和配置。</li>
+<li>以为 Task 自己决定执行顺序。执行顺序通常由 pipeline 配置决定。</li>
+<li>以为 Task 失败后整个 Planning 一定崩溃。Stage 可能执行 fallback task。</li>
+</ul>
+<h2 id="12-自测题">12. 自测题</h2>
+<ol>
+<li>Scenario、Stage、Task 分别回答什么问题？</li>
+<li>为什么 Stage 需要 <code>task_list_</code>？</li>
+<li>谁决定 Task 的执行顺序？</li>
+<li><code>Task::Execute</code> 接收哪两个关键对象？</li>
+<li>纯虚函数 <code>Process(...) = 0</code> 表示什么？</li>
+<li>Task 失败后可能发生什么？</li>
+<li>LaneFollow 场景中的第一个外部路径任务是什么？</li>
+<li>为什么多个 Task 可以共享 Frame？</li>
+<li>Scenario 的职责是否等于路径生成？</li>
+<li>用一句话概括三层结构。</li>
+</ol>
+<h2 id="13-参考答案">13. 参考答案</h2>
+<ol>
+<li>Scenario 回答遇到什么情况，Stage 回答进行到哪一步，Task 回答具体做什么。</li>
+<li>它保存当前 Stage 需要执行的多个任务，支持按顺序循环执行。</li>
+<li>通常由 pipeline 配置文件定义，Stage 按配置创建并执行。</li>
+<li><code>Frame*</code> 和 <code>ReferenceLineInfo*</code>。</li>
+<li>基类不给实现，派生类必须实现。</li>
+<li>结束后续任务并执行 fallback task，或让上层进行安全降级。</li>
+<li><code>LaneChangePath</code>，然后是 <code>LaneFollowPath</code>。</li>
+<li>它们共同处理同一轮规划数据，通过共享上下文读写中间结果。</li>
+<li>不等于。Scenario 组织场景和 Stage，路径由具体 Task 生成。</li>
+<li>Scenario 管情境，Stage 管阶段，Task 管具体工作。</li>
+</ol>
+<h2 id="14-过关检查">14. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能用生活例子解释三层结构。</li>
+<li><input disabled="" type="checkbox"> 能找到三个基类。</li>
+<li><input disabled="" type="checkbox"> 能读懂 LaneFollow pipeline。</li>
+<li><input disabled="" type="checkbox"> 能说明 Task 失败时的 fallback。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="15-下一课衔接">15. 下一课衔接</h2>
+<p>后面会开始补充 C++ 生存包。先学变量、函数、条件和循环，再学指针、引用、类和继承。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-02.html"><small>上一课</small><strong>02 · Planning 一轮流程</strong></a><a class="page-link next" href="lesson-04.html"><small>下一课</small><strong>04 · C++ 变量、函数与条件</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

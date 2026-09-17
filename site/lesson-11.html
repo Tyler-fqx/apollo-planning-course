@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="拆解最常用的默认场景、切入条件、LaneFollowStage 和完整 Task pipeline。">
+    <title>LaneFollow 场景 | Apollo Planning 自学站</title>
+    <link rel="stylesheet" href="assets/css/site.css">
+    <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
+  </head>
+<body data-page="lesson" data-lesson-id="lesson-11">
+  <a class="skip-link" href="#main-content">跳到正文</a>
+  <header class="topbar">
+    <a class="brand" href="index.html" aria-label="返回课程首页">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-copy"><strong>APOLLO / PLANNING LAB</strong><span>从仿真环境到 Scenario 与 Task</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="commit-pill">commit d53aa3da</span>
+      <button class="action-button" type="button" data-search-open aria-label="搜索课程"><span>搜索</span><span class="button-label">课程内容</span><span aria-hidden="true">/</span></button>
+      <button class="icon-button" type="button" data-theme-toggle aria-label="切换深浅主题" aria-pressed="false">◐</button>
+      <button class="icon-button menu-button" type="button" data-menu-toggle aria-label="打开课程目录" aria-expanded="false">≡</button>
+    </div>
+  </header>
+  <div class="site-layout">
+    <aside class="sidebar" aria-label="课程导航">
+    <div class="sidebar-progress">
+      <div class="progress-head"><span>学习进度</span><strong data-progress-value>0%</strong></div>
+      <div class="progress-track" aria-hidden="true"><div class="progress-fill" data-progress-fill></div></div>
+      <p class="sidebar-note"><span data-progress-count>0 / 21</span> 个单元已完成。进度只保存在你的浏览器。</p>
+    </div>
+    <section class="nav-group"><p class="nav-label">先跑起来</p><ul class="nav-list"><li><a class="nav-link" href="lesson-00.html" data-lesson-id="lesson-00"><span class="nav-index">00</span><span class="nav-title">Linux 与 Apollo 仿真环境</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-01.html" data-lesson-id="lesson-01"><span class="nav-index">01</span><span class="nav-title">Apollo 与 Planning 全景</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">建立地图</p><ul class="nav-list"><li><a class="nav-link" href="lesson-02.html" data-lesson-id="lesson-02"><span class="nav-index">02</span><span class="nav-title">Planning 一轮流程</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-03.html" data-lesson-id="lesson-03"><span class="nav-index">03</span><span class="nav-title">Scenario / Stage / Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">C++ 生存包</p><ul class="nav-list"><li><a class="nav-link" href="lesson-04.html" data-lesson-id="lesson-04"><span class="nav-index">04</span><span class="nav-title">变量、函数与条件</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-05.html" data-lesson-id="lesson-05"><span class="nav-index">05</span><span class="nav-title">指针基础</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-06.html" data-lesson-id="lesson-06"><span class="nav-index">06</span><span class="nav-title">引用与 const</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-07.html" data-lesson-id="lesson-07"><span class="nav-index">07</span><span class="nav-title">类、对象与构造</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-08.html" data-lesson-id="lesson-08"><span class="nav-index">08</span><span class="nav-title">继承与 override</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-09.html" data-lesson-id="lesson-09"><span class="nav-index">09</span><span class="nav-title">vector 与智能指针</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">Scenario / Task</p><ul class="nav-list"><li><a class="nav-link" href="lesson-10.html" data-lesson-id="lesson-10"><span class="nav-index">10</span><span class="nav-title">ScenarioManager 场景切换</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-11.html" data-lesson-id="lesson-11" aria-current="page"><span class="nav-index">11</span><span class="nav-title">LaneFollow 场景</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-12.html" data-lesson-id="lesson-12"><span class="nav-index">12</span><span class="nav-title">Stage 如何执行 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-13.html" data-lesson-id="lesson-13"><span class="nav-index">13</span><span class="nav-title">Task 基类</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-14.html" data-lesson-id="lesson-14"><span class="nav-index">14</span><span class="nav-title">路径 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-15.html" data-lesson-id="lesson-15"><span class="nav-index">15</span><span class="nav-title">速度 Task 示例</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-16.html" data-lesson-id="lesson-16"><span class="nav-index">16</span><span class="nav-title">TrafficRule 与 Task</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section><section class="nav-group"><p class="nav-label">动手修改</p><ul class="nav-list"><li><a class="nav-link" href="lesson-17.html" data-lesson-id="lesson-17"><span class="nav-index">17</span><span class="nav-title">配置、插件与编译</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-18.html" data-lesson-id="lesson-18"><span class="nav-index">18</span><span class="nav-title">新增一个简单 Task</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-19.html" data-lesson-id="lesson-19"><span class="nav-index">19</span><span class="nav-title">日志与 DreamView 调试</span><span class="nav-state" aria-hidden="true"></span></a></li><li><a class="nav-link" href="lesson-20.html" data-lesson-id="lesson-20"><span class="nav-index">20</span><span class="nav-title">小型限速功能实战</span><span class="nav-state" aria-hidden="true"></span></a></li></ul></section>
+  </aside>
+    <main class="main" id="main-content">
+      <article class="lesson-shell">
+        <header class="lesson-header reveal">
+          <p class="lesson-kicker">Unit 11 - Scenario</p>
+          <h1>LaneFollow 场景</h1>
+          <p class="lesson-summary">拆解最常用的默认场景、切入条件、LaneFollowStage 和完整 Task pipeline。</p>
+          <div class="lesson-meta">
+            <span class="meta-pill"><strong>难度</strong>核心</span>
+            <span class="meta-pill"><strong>用时</strong>100 - 130 分钟</span>
+            <span class="meta-pill"><strong>前置</strong>第 10 课</span>
+          </div>
+        </header>
+        <div class="lesson-content"><blockquote>
+<p>学生自学版。LaneFollow 是最常用、最适合作为新手入口的场景。</p>
+</blockquote>
+<h2 id="1-学习信息">1. 学习信息</h2>
+<ul>
+<li>预计用时：100～130 分钟。</li>
+<li>难度：核心。</li>
+<li>前置：第 10 课。</li>
+<li>代码基线：<code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code>。</li>
+</ul>
+<h2 id="2-学完本课应能做到">2. 学完本课应能做到</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 解释 LaneFollow 的作用。</li>
+<li><input disabled="" type="checkbox"> 阅读 <code>LaneFollowScenario::IsTransferable</code>。</li>
+<li><input disabled="" type="checkbox"> 找到 LaneFollow 的 pipeline 配置。</li>
+<li><input disabled="" type="checkbox"> 说出 LaneFollowStage 的主要职责。</li>
+<li><input disabled="" type="checkbox"> 理解 LaneFollow 为什么经常作为默认场景。</li>
+</ul>
+<h2 id="3-lanefollow-是什么">3. LaneFollow 是什么</h2>
+<p>LaneFollow 表示：</p>
+<pre><code class="language-text">车辆沿着路由路线继续行驶
+在当前车道处理障碍物、路径和速度
+没有进入停止牌、交通灯专用场景或泊车场景
+</code></pre>
+<p>它通常是默认场景。</p>
+<h2 id="4-场景类定义">4. 场景类定义</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/lane_follow_scenario.h</code>，约第 33～50 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_scenario.h，约第 33 行
+class LaneFollowScenario : public Scenario {
+ public:
+  // LaneFollow 不使用特殊共享上下文，因此返回 nullptr
+  ScenarioContext* GetContext() override { return nullptr; }
+
+  // 判断是否可以从其他场景切换到 LaneFollow
+  bool IsTransferable(const Scenario* other_scenario,
+                      const Frame&amp; frame) override;
+};
+</code></pre>
+<p>继承关系：</p>
+<pre><code class="language-text">Scenario
+  -&gt; LaneFollowScenario
+</code></pre>
+<h2 id="5-切入条件">5. 切入条件</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/lane_follow_scenario.cc</code>，约第 29～42 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_scenario.cc，约第 29 行
+bool LaneFollowScenario::IsTransferable(const Scenario* other_scenario,
+                                        const Frame&amp; frame) {
+  // 必须有 lane_follow_command，说明存在沿路线行驶的导航命令
+  if (!frame.local_view().planning_command-&gt;has_lane_follow_command()) {
+    return false;
+  }
+
+  // 必须有参考线，否则无法沿车道规划
+  if (frame.reference_line_info().empty()) {
+    return false;
+  }
+
+  // 当前没有其他场景时，可以进入 LaneFollow
+  if (other_scenario == nullptr) {
+    return true;
+  }
+
+  // 对新手先理解为：满足基础条件后允许作为默认场景
+  return true;
+}
+</code></pre>
+<p>核心条件：</p>
+<pre><code class="language-text">有 LaneFollow 导航命令
+有参考线信息
+</code></pre>
+<h2 id="6-lanefollow-stage">6. LaneFollow Stage</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/lane_follow_stage.h</code>，约第 33～57 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_stage.h，约第 33 行
+class LaneFollowStage : public Stage {
+ public:
+  // 运行车道跟随阶段
+  StageResult Process(const common::TrajectoryPoint&amp; planning_init_point,
+                      Frame* frame) override;
+
+  // 在某条参考线上生成路径与速度
+  StageResult PlanOnReferenceLine(
+      const common::TrajectoryPoint&amp; planning_start_point, Frame* frame,
+      ReferenceLineInfo* reference_line_info);
+
+  // 任务失败时生成回退轨迹
+  void PlanFallbackTrajectory(
+      const common::TrajectoryPoint&amp; planning_start_point, Frame* frame,
+      ReferenceLineInfo* reference_line_info);
+};
+</code></pre>
+<h2 id="7-stage-的一轮处理">7. Stage 的一轮处理</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/lane_follow_stage.cc</code>，约第 82～134 行。</p>
+</blockquote>
+<pre><code class="language-cpp">// 源码位置：lane_follow_stage.cc，约第 82 行
+StageResult LaneFollowStage::Process(
+    const TrajectoryPoint&amp; planning_start_point, Frame* frame) {
+  // 没有参考线时，本阶段直接结束
+  if (frame-&gt;reference_line_info().empty()) {
+    return StageResult(StageStatusType::FINISHED);
+  }
+
+  // 依次尝试 Frame 中的参考线
+  for (auto&amp; reference_line_info : *frame-&gt;mutable_reference_line_info()) {
+    // 在当前参考线上执行任务链
+    result = PlanOnReferenceLine(planning_start_point, frame,
+                                 &amp;reference_line_info);
+
+    // 如果路径和速度都成功，就认为找到了可行驶参考线
+    if (!result.HasError()) {
+      has_drivable_reference_line = true;
+      continue;
+    }
+  }
+
+  // 至少一条参考线可行驶，则 Stage 继续运行
+  return has_drivable_reference_line
+             ? result.SetStageStatus(StageStatusType::RUNNING)
+             : result.SetStageStatus(StageStatusType::ERROR);
+}
+</code></pre>
+<h2 id="8-lanefollow-的-task-管道">8. LaneFollow 的 Task 管道</h2>
+<blockquote>
+<p>源码位置：<code>modules/planning/scenarios/lane_follow/conf/pipeline.pb.txt</code>，第 1～47 行。</p>
+</blockquote>
+<pre><code class="language-text"># 源码位置：lane_follow/conf/pipeline.pb.txt
+stage {
+  name: &quot;LANE_FOLLOW_STAGE&quot;
+  type: &quot;LaneFollowStage&quot;
+
+  # 1. 变道路径
+  task { name: &quot;LANE_CHANGE_PATH&quot;  type: &quot;LaneChangePath&quot; }
+  # 2. 车道跟随路径
+  task { name: &quot;LANE_FOLLOW_PATH&quot;  type: &quot;LaneFollowPath&quot; }
+  # 3. 借道路径
+  task { name: &quot;LANE_BORROW_PATH&quot;  type: &quot;LaneBorrowPath&quot; }
+  # 4. 回退路径
+  task { name: &quot;FALLBACK_PATH&quot;     type: &quot;FallbackPath&quot; }
+  # 5. 路径决策
+  task { name: &quot;PATH_DECIDER&quot;      type: &quot;PathDecider&quot; }
+
+  # 6. 基础停车规则
+  task { name: &quot;RULE_BASED_STOP_DECIDER&quot; type: &quot;RuleBasedStopDecider&quot; }
+  # 7. 先计算速度边界
+  task { name: &quot;SPEED_BOUNDS_PRIORI_DECIDER&quot; type: &quot;SpeedBoundsDecider&quot; }
+  # 8. 生成速度启发信息
+  task { name: &quot;SPEED_HEURISTIC_OPTIMIZER&quot; type: &quot;PathTimeHeuristicOptimizer&quot; }
+  # 9. 速度决策
+  task { name: &quot;SPEED_DECIDER&quot; type: &quot;SpeedDecider&quot; }
+  # 10. 再计算最终速度边界
+  task { name: &quot;SPEED_BOUNDS_FINAL_DECIDER&quot; type: &quot;SpeedBoundsDecider&quot; }
+  # 11. 生成平滑速度曲线
+  task { name: &quot;PIECEWISE_JERK_SPEED&quot; type: &quot;PiecewiseJerkSpeedOptimizer&quot; }
+}
+</code></pre>
+<p>新手不要一次读完全部 Task。建议顺序：</p>
+<pre><code class="language-text">LaneFollowPath
+  -&gt; PathDecider
+  -&gt; SpeedBoundsDecider
+  -&gt; PiecewiseJerkSpeedOptimizer
+</code></pre>
+<h2 id="9-动手实验">9. 动手实验</h2>
+<pre><code class="language-powershell">rg -n &quot;class LaneFollowScenario|IsTransferable|GetContext&quot; modules\planning\scenarios\lane_follow\lane_follow_scenario.h modules\planning\scenarios\lane_follow\lane_follow_scenario.cc
+rg -n &quot;class LaneFollowStage|Process|PlanOnReferenceLine|PlanFallbackTrajectory&quot; modules\planning\scenarios\lane_follow\lane_follow_stage.h
+Get-Content modules\planning\scenarios\lane_follow\conf\pipeline.pb.txt
+</code></pre>
+<p>画出：</p>
+<pre><code class="language-text">LaneFollowScenario
+  -&gt; LaneFollowStage
+      -&gt; LaneChangePath
+      -&gt; LaneFollowPath
+      -&gt; PathDecider
+      -&gt; ...
+</code></pre>
+<h2 id="10-常见错误">10. 常见错误</h2>
+<ul>
+<li>认为 LaneFollow 只会直行。</li>
+<li>忽略它也会执行变道、借道和障碍物处理任务。</li>
+<li>把 pipeline 中的 Task 顺序当作无关紧要。</li>
+<li>认为只有进入特殊场景才需要 Task。</li>
+<li>没有参考线时仍期待 LaneFollow 能正常生成轨迹。</li>
+</ul>
+<h2 id="11-自测题">11. 自测题</h2>
+<ol>
+<li>LaneFollow 代表什么驾驶状态？</li>
+<li>进入 LaneFollow 至少需要什么条件？</li>
+<li><code>GetContext()</code> 为什么返回 <code>nullptr</code>？</li>
+<li>LaneFollowStage 为什么需要尝试多条参考线？</li>
+<li><code>PlanOnReferenceLine</code> 做什么？</li>
+<li>pipeline 文件的作用是什么？</li>
+<li>哪一个 Task 负责车道跟随路径？</li>
+<li>路径之后第一类速度任务是什么？</li>
+<li>为什么新手先看 LaneFollow 场景？</li>
+<li>LaneFollow 是否包含变道任务？</li>
+</ol>
+<h2 id="12-参考答案">12. 参考答案</h2>
+<ol>
+<li>沿路由和参考线继续行驶的默认场景。</li>
+<li>有 LaneFollow 命令和有参考线信息。</li>
+<li>LaneFollow 不依赖专门的场景共享上下文。</li>
+<li>选择一条路径和速度都可行、代价可接受的参考线。</li>
+<li>在某条参考线上执行 LaneFollow 的 Task 链并生成轨迹。</li>
+<li>定义 Stage 及其包含的 Task 和执行顺序。</li>
+<li><code>LaneFollowPath</code>。</li>
+<li><code>SpeedBoundsDecider</code>。</li>
+<li>它是最常见、配置完整、结构清晰的默认场景。</li>
+<li>包含，例如 <code>LaneChangePath</code> 和 <code>LaneBorrowPath</code>。</li>
+</ol>
+<h2 id="13-过关检查">13. 过关检查</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 能说明 LaneFollow 的切入条件。</li>
+<li><input disabled="" type="checkbox"> 能找到 LaneFollowStage。</li>
+<li><input disabled="" type="checkbox"> 能读懂 pipeline 顺序。</li>
+<li><input disabled="" type="checkbox"> 能画出场景到 Task 的关系图。</li>
+<li><input disabled="" type="checkbox"> 十道题至少答对八道。</li>
+</ul>
+<h2 id="14-下一课衔接">14. 下一课衔接</h2>
+<p>下一课进入 Stage 和 Task 的执行细节，观察任务列表如何循环、失败如何终止、fallback 如何接管。</p>
+</div>
+        <footer class="lesson-footer">
+          <div class="complete-row">
+            <p>完成实验和自测后，再标记本课完成。进度只保存在当前浏览器。</p>
+            <button class="complete-button" type="button" data-complete-lesson aria-pressed="false">标记本课完成</button>
+          </div>
+          <nav class="lesson-pagination" aria-label="课程翻页"><a class="page-link prev" href="lesson-10.html"><small>上一课</small><strong>10 · ScenarioManager 与场景切换</strong></a><a class="page-link next" href="lesson-12.html"><small>下一课</small><strong>12 · Stage 如何执行 Task</strong></a></nav>
+        </footer>
+      </article>
+    </main>
+    <aside class="toc" aria-label="本页目录"><p class="toc-label">本页目录</p><ul class="toc-list" data-toc></ul></aside>
+  </div>
+  <div class="mobile-scrim" aria-hidden="true"></div>
+  <div class="search-dialog" data-search-dialog aria-hidden="true" role="dialog" aria-modal="true" aria-label="搜索课程内容">
+    <div class="search-panel">
+      <div class="search-input-wrap"><span>SEARCH</span><input class="search-input" data-search-input type="search" placeholder="搜索 Task、指针、WSL、Scenario..." autocomplete="off"><span>ESC</span></div>
+      <div class="search-results" data-search-results></div>
+    </div>
+  </div>
+  <footer class="site-footer"><p><strong>Apollo Planning 自学站</strong> · 代码核对基线 <code>d53aa3da47a06a08e6d0cd175d5623a34fa0d6aa</code></p><p>教程内容只用于学习。运行环境依据 Apollo EDU PnC 安装指南整理，源码结构以固定官方提交为准。</p></footer>
+  <script src="assets/js/search-index.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>
