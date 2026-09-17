@@ -6,7 +6,7 @@
     <meta name="description" content="建立 Apollo 与 Planning 的整体地图，认识 Component、Planner、Scenario、Stage 和 Task。">
     <title>Apollo 与 Planning 全景地图 | Apollo Planning 自学站</title>
     <link rel="stylesheet" href="assets/css/site.css">
-    
+    <script defer src="assets/vendor/mermaid/mermaid.min.js"></script>
     <script>try{var t=localStorage.getItem("apollo-planning-theme");if(t){document.documentElement.dataset.theme=t}}catch(e){}</script>
   </head>
 <body data-page="lesson" data-lesson-id="lesson-01">
@@ -66,25 +66,114 @@
 <li><input disabled="" type="checkbox"> 说出一轮规划至少需要哪三类输入。</li>
 </ul>
 <h2 id="3-apollo-整体架构的简单理解">3. Apollo 整体架构的简单理解</h2>
-<p>先不要背所有模块。把 Apollo 想成一条从车辆环境到车辆动作的流水线：</p>
-<pre><code class="language-text">道路、车辆、障碍物、交通信号
-              |
-              v
-          传感器与驱动
-              |
-              v
-定位 / 感知 / 预测
-              |
-              v
-            规划
-              |
-              v
-            控制
-              |
-              v
-        车辆底盘执行
+<p>先不要背所有模块。先看 Apollo 分为哪些层，以及 Planning 在其中接收什么、输出什么。</p>
+<p>Apollo 不是一条“感知 -&gt; 规划 -&gt; 控制”的单线，而是分层的协同系统。可以先用下面六个问题理解整体结构：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>这一类组件回答什么问题</th>
+<th>典型内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>车辆与环境层</td>
+<td>车外发生了什么？</td>
+<td>道路、车辆、障碍物、交通信号</td>
+</tr>
+<tr>
+<td>车载接口层</td>
+<td>车辆能看到什么、当前状态如何？</td>
+<td>传感器、驱动、Canbus、底盘状态</td>
+</tr>
+<tr>
+<td>环境理解层</td>
+<td>车在哪里、周围是什么、别人接下来怎么动？</td>
+<td>定位、感知、预测、地图、路由</td>
+</tr>
+<tr>
+<td>决策与规划层</td>
+<td>自车接下来应该怎么走？</td>
+<td>Planning、Scenario、Stage、Task</td>
+</tr>
+<tr>
+<td>控制与执行层</td>
+<td>怎样把轨迹变成油门、刹车和转向？</td>
+<td>Control、底盘执行</td>
+</tr>
+<tr>
+<td>基础设施层</td>
+<td>这些模块怎样运行、通信、构建和观察？</td>
+<td>Linux、Docker、AEM、Cyber、buildtool、DreamView</td>
+</tr>
+</tbody></table>
+<p>把主链路和横向能力放在一起看：</p>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph L1[&quot;车辆与环境层&quot;]
+        Env[&quot;道路 / 车辆 / 障碍物 / 交通信号&quot;]
+    end
+
+    subgraph L2[&quot;车载接口层&quot;]
+        Sensors[&quot;传感器与驱动&quot;]
+        Canbus[&quot;Canbus / 底盘状态&quot;]
+    end
+
+    subgraph L3[&quot;环境理解层&quot;]
+        Localization[&quot;Localization 定位&quot;]
+        Perception[&quot;Perception 感知&quot;]
+        Prediction[&quot;Prediction 预测&quot;]
+        Map[&quot;HD Map / Routing&quot;]
+    end
+
+    subgraph L4[&quot;决策与规划层&quot;]
+        Planning[&quot;Planning 规划&quot;]
+        Scenario[&quot;Scenario / Stage / Task&quot;]
+    end
+
+    subgraph L5[&quot;控制与执行层&quot;]
+        Control[&quot;Control 控制&quot;]
+        Chassis[&quot;车辆底盘执行&quot;]
+    end
+
+    subgraph Platform[&quot;横向基础设施&quot;]
+        Cyber[&quot;Cyber 通信&quot;]
+        Tools[&quot;AEM / buildtool&quot;]
+        DreamView[&quot;DreamView 可视化&quot;]
+    end
+
+    Env --&gt; Sensors
+    Env --&gt; Canbus
+    Sensors --&gt; Localization
+    Sensors --&gt; Perception
+    Canbus --&gt; Localization
+    Localization --&gt; Perception
+    Perception --&gt; Prediction
+    Map --&gt; Perception
+    Map --&gt; Planning
+    Localization --&gt; Planning
+    Perception --&gt; Planning
+    Prediction --&gt; Planning
+    Planning --&gt; Scenario
+    Scenario --&gt; Planning
+    Planning --&gt; Control
+    Control --&gt; Chassis
+    Cyber -.模块通信.-&gt; Perception
+    Cyber -.模块通信.-&gt; Planning
+    Cyber -.模块通信.-&gt; Control
+    DreamView -.观察.-&gt; Planning
+    Tools -.构建和启动.-&gt; Planning
 </code></pre>
-<p>Apollo 不是只有一个 Planning 程序。它由很多协同部分组成。</p>
+<p>读图时抓住三条线：</p>
+<ol>
+<li><strong>主链路</strong>：环境 -&gt; 车载数据 -&gt; 环境理解 -&gt; Planning -&gt; Control -&gt; 执行。</li>
+<li><strong>横向能力</strong>：Cyber、AEM、buildtool、DreamView 不是规划算法，但它们支撑整个系统运行。</li>
+<li><strong>Planning 的边界</strong>：Planning 接收定位、底盘、预测、地图和路由信息，输出 <code>ADCTrajectory</code>，然后把轨迹交给 Control。</li>
+</ol>
+<p>这比单纯的“感知 -&gt; 规划 -&gt; 控制”多解释了两件事：</p>
+<ul>
+<li>上游数据不是一个模块产生的，而是定位、感知、预测、地图和路由共同提供。</li>
+<li>Planning 不是孤立的算法，而是运行在 Cyber、构建工具和仿真环境中的插件系统。</li>
+</ul>
 <h3 id="3-1-基础设施层">3.1 基础设施层</h3>
 <p>包括：</p>
 <ul>

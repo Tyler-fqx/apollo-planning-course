@@ -22,28 +22,89 @@
 
 ## 3. Apollo 整体架构的简单理解
 
-先不要背所有模块。把 Apollo 想成一条从车辆环境到车辆动作的流水线：
+先不要背所有模块。先看 Apollo 分为哪些层，以及 Planning 在其中接收什么、输出什么。
 
-```text
-道路、车辆、障碍物、交通信号
-              |
-              v
-          传感器与驱动
-              |
-              v
-定位 / 感知 / 预测
-              |
-              v
-            规划
-              |
-              v
-            控制
-              |
-              v
-        车辆底盘执行
+Apollo 不是一条“感知 -> 规划 -> 控制”的单线，而是分层的协同系统。可以先用下面六个问题理解整体结构：
+
+| 层次 | 这一类组件回答什么问题 | 典型内容 |
+| --- | --- | --- |
+| 车辆与环境层 | 车外发生了什么？ | 道路、车辆、障碍物、交通信号 |
+| 车载接口层 | 车辆能看到什么、当前状态如何？ | 传感器、驱动、Canbus、底盘状态 |
+| 环境理解层 | 车在哪里、周围是什么、别人接下来怎么动？ | 定位、感知、预测、地图、路由 |
+| 决策与规划层 | 自车接下来应该怎么走？ | Planning、Scenario、Stage、Task |
+| 控制与执行层 | 怎样把轨迹变成油门、刹车和转向？ | Control、底盘执行 |
+| 基础设施层 | 这些模块怎样运行、通信、构建和观察？ | Linux、Docker、AEM、Cyber、buildtool、DreamView |
+
+把主链路和横向能力放在一起看：
+
+```mermaid
+flowchart TB
+    subgraph L1["车辆与环境层"]
+        Env["道路 / 车辆 / 障碍物 / 交通信号"]
+    end
+
+    subgraph L2["车载接口层"]
+        Sensors["传感器与驱动"]
+        Canbus["Canbus / 底盘状态"]
+    end
+
+    subgraph L3["环境理解层"]
+        Localization["Localization 定位"]
+        Perception["Perception 感知"]
+        Prediction["Prediction 预测"]
+        Map["HD Map / Routing"]
+    end
+
+    subgraph L4["决策与规划层"]
+        Planning["Planning 规划"]
+        Scenario["Scenario / Stage / Task"]
+    end
+
+    subgraph L5["控制与执行层"]
+        Control["Control 控制"]
+        Chassis["车辆底盘执行"]
+    end
+
+    subgraph Platform["横向基础设施"]
+        Cyber["Cyber 通信"]
+        Tools["AEM / buildtool"]
+        DreamView["DreamView 可视化"]
+    end
+
+    Env --> Sensors
+    Env --> Canbus
+    Sensors --> Localization
+    Sensors --> Perception
+    Canbus --> Localization
+    Localization --> Perception
+    Perception --> Prediction
+    Map --> Perception
+    Map --> Planning
+    Localization --> Planning
+    Perception --> Planning
+    Prediction --> Planning
+    Planning --> Scenario
+    Scenario --> Planning
+    Planning --> Control
+    Control --> Chassis
+    Cyber -.模块通信.-> Perception
+    Cyber -.模块通信.-> Planning
+    Cyber -.模块通信.-> Control
+    DreamView -.观察.-> Planning
+    Tools -.构建和启动.-> Planning
 ```
 
-Apollo 不是只有一个 Planning 程序。它由很多协同部分组成。
+读图时抓住三条线：
+
+1. **主链路**：环境 -> 车载数据 -> 环境理解 -> Planning -> Control -> 执行。
+2. **横向能力**：Cyber、AEM、buildtool、DreamView 不是规划算法，但它们支撑整个系统运行。
+3. **Planning 的边界**：Planning 接收定位、底盘、预测、地图和路由信息，输出 `ADCTrajectory`，然后把轨迹交给 Control。
+
+这比单纯的“感知 -> 规划 -> 控制”多解释了两件事：
+
+- 上游数据不是一个模块产生的，而是定位、感知、预测、地图和路由共同提供。
+- Planning 不是孤立的算法，而是运行在 Cyber、构建工具和仿真环境中的插件系统。
+
 
 ### 3.1 基础设施层
 
